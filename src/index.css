@@ -1,7 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto+Serif:opsz,wght@8..144,100..900&display=swap');
 @import "tailwindcss";
-
-
+@config "../tailwind.config.js";
 
 .roboto-serif {
   font-family: "Roboto Serif", serif;
