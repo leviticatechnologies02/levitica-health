@@ -18,7 +18,7 @@ const Login = () => {
 
         <div className="hidden md:flex md:w-5/12 relative bg-secondary-900 flex-col justify-end p-8 overflow-hidden">
           <img
-            src="https://images.unsplash.com/photo-1559839734-2b71ea197ec2?q=80&w=800&auto=format&fit=crop"
+            src="https://images.unsplash.com/photo-1505751172876-fa1923c5c528?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8aG9zcGl0YWwlMjBtYW5hZ2VtZW50fGVufDB8fDB8fHww"
             alt="Doctor"
             className="absolute inset-0 w-full h-full object-cover mix-blend-overlay opacity-90"
           />
