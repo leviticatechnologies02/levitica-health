@@ -1,6 +1,8 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
+  const navigate = useNavigate();
   return (
     <div className="min-h-screen relative flex items-center justify-center p-4 sm:p-8">
       <div className="absolute inset-0 z-0 flex flex-col">
@@ -48,7 +50,10 @@ const Login = () => {
               </p>
             </div>
 
-            <form className="space-y-4" onSubmit={(e) => e.preventDefault()}>
+            <form className="space-y-4" onSubmit={(e) => {
+              e.preventDefault();
+              navigate('/superadmin');
+            }}>
               <div>
                 <label className="block text-xs font-medium text-gray-700 mb-1">Email Address</label>
                 <div className="relative">
