@@ -1,7 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
-const Login = () => {
+const Login = () => { 
   const navigate = useNavigate();
   return (
     <div className="min-h-screen relative flex items-center justify-center p-4 sm:p-8">

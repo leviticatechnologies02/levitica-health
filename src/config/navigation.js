@@ -1,4 +1,4 @@
-import { LayoutDashboard, Users, Settings, Activity } from 'lucide-react';
+import { LayoutDashboard, Hospital,Subscription,Plan,Announcement,Profile,settings } from 'lucide-react';
 
 export const SUPERADMIN_NAV = [
   {
@@ -7,18 +7,33 @@ export const SUPERADMIN_NAV = [
     icon: LayoutDashboard,
   },
   {
-    name: 'User Management',
-    path: '/superadmin/users',
-    icon: Users,
+    name: 'Hospitals',
+    path: '/superadmin/hospitals',
+    icon: Hospital,
   },
   {
-    name: 'Activity Logs',
-    path: '/superadmin/logs',
-    icon: Activity,
+    name: 'Subscriptions',
+    path: '/superadmin/subscriptions',
+    icon: Subscription,
   },
   {
-    name: 'Settings',
+    name: 'Plans',
+    path: '/superadmin/plans',
+    icon: Plan,
+  },
+   {
+    name: 'Announcements',
+    path: '/superadmin/announcements',
+    icon: Announcement,
+  },
+   {
+    name: 'Profile',
+    path: '/superadmin/profile',
+    icon: Plan,
+  },
+   {
+    name: 'settings',
     path: '/superadmin/settings',
-    icon: Settings,
+    icon: settings,
   },
 ];
