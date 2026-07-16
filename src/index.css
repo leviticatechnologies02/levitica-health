@@ -1,15 +1,30 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto+Serif:opsz,wght@8..144,100..900&display=swap');
 @import "tailwindcss";
 @config "../tailwind.config.js";
 
-.roboto-serif {
-  font-family: "Roboto Serif", serif;
-  font-optical-sizing: auto;
-  font-weight: 400;
-  font-style: normal;
-  font-variation-settings: "wdth" 100, "GRAD" 0;
+/* Modern Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
 }
 
-body {
-  font-family: "Roboto Serif", serif;
+::-webkit-scrollbar-track {
+  background: #f8fafc; /* slate-50 */
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1; /* slate-300 */
+  border-radius: 10px;
+  transition: background-color 0.3s ease;
+}
+
+/* Hover state using Levitica's primary orange */
+::-webkit-scrollbar-thumb:hover {
+  background: #f95e09; /* primary-500 */
+}
+
+/* Firefox compatibility */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #cbd5e1 #f8fafc;
 }
