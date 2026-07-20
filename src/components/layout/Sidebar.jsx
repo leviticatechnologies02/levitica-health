@@ -8,7 +8,6 @@ const Sidebar = ({ role = 'superadmin', isCollapsed, isMobileOpen, setIsMobileOp
 
   return (
     <>
-      {/* Mobile Overlay */}
       {isMobileOpen && (
         <div 
           className="md:hidden fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-40 transition-opacity"
@@ -27,7 +26,6 @@ const Sidebar = ({ role = 'superadmin', isCollapsed, isMobileOpen, setIsMobileOp
               alt="Levitica Health"
               className={`w-full object-contain transition-all duration-300 hidden md:block ${isCollapsed ? 'max-h-8' : 'max-h-20'}`}
             />
-            {/* Mobile always shows full logo */}
             <img
               src="/sidebarlogo.png"
               alt="Levitica Health"
@@ -47,7 +45,7 @@ const Sidebar = ({ role = 'superadmin', isCollapsed, isMobileOpen, setIsMobileOp
               <NavLink
                 key={item.path}
                 to={item.path}
-                end={item.path === '/superadmin'}
+                end
                 onClick={() => setIsMobileOpen(false)}
                 title={isCollapsed ? item.name : ''}
                 className={({ isActive }) =>

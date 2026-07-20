@@ -1,11 +1,12 @@
-import { 
-  LayoutDashboard, 
-  Building2, 
-  CreditCard, 
-  ClipboardList, 
-  Megaphone, 
-  User, 
-  Settings 
+import {
+  LayoutDashboard,
+  Building2,
+  CreditCard,
+  ClipboardList,
+  Megaphone,
+  User,
+  Settings,
+  Plus
 } from 'lucide-react';
 
 export const SUPERADMIN_NAV = [
@@ -18,6 +19,11 @@ export const SUPERADMIN_NAV = [
     name: 'Hospitals',
     path: '/superadmin/hospitals',
     icon: Building2,
+  },
+  {
+    name: 'Add Hospital',
+    path: '/superadmin/hospitals/add',
+    icon: Plus,
   },
   {
     name: 'Subscriptions',

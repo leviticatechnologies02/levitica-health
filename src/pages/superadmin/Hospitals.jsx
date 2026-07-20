@@ -1,10 +1,12 @@
 import React from 'react';
 import { Building2, Plus, Search, Filter } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 const Hospitals = () => {
+  const navigate = useNavigate();
+
   return (
     <div className="animate-in fade-in zoom-in-95 duration-500 flex flex-col h-full min-h-[calc(100vh-8rem)]">
-      {/* Page Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
         <div>
           <h1 className="text-2xl font-semibold text-slate-900 tracking-tight">Hospitals Management</h1>
@@ -15,14 +17,16 @@ const Hospitals = () => {
             <Filter size={16} />
             Filters
           </button>
-          <button className="flex items-center justify-center gap-2 px-4 py-2 bg-primary-500 text-white rounded-lg hover:bg-primary-600 transition-all shadow-md hover:shadow-lg hover:-translate-y-0.5 font-medium text-sm">
+          <button 
+            onClick={() => navigate('/superadmin/hospitals/add')}
+            className="flex items-center justify-center gap-2 px-4 py-2 bg-primary-500 text-white rounded-lg hover:bg-primary-600 transition-all shadow-md hover:shadow-lg hover:-translate-y-0.5 font-medium text-sm"
+          >
             <Plus size={16} />
             Add Hospital
           </button>
         </div>
       </div>
 
-      {/* Toolbar / Search */}
       <div className="bg-white p-4 rounded-t-2xl border-b border-slate-100 shadow-sm flex items-center justify-between">
         <div className="relative w-full max-w-md">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
@@ -35,9 +39,7 @@ const Hospitals = () => {
         </div>
       </div>
 
-      {/* Empty State */}
       <div className="flex-1 bg-white rounded-b-2xl shadow-sm border border-t-0 border-slate-100 flex flex-col items-center justify-center p-12 relative overflow-hidden group">
-        {/* Subtle background decoration */}
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-slate-50 rounded-full blur-3xl opacity-50 z-0 pointer-events-none"></div>
 
         <div className="relative z-10 text-center max-w-sm mx-auto">
@@ -51,7 +53,10 @@ const Hospitals = () => {
             There are currently no hospitals registered in the system. Get started by adding your first healthcare facility.
           </p>
           
-          <button className="inline-flex items-center justify-center gap-2 px-6 py-2.5 bg-primary-500 text-white rounded-lg hover:bg-primary-600 transition-all shadow-md hover:shadow-lg hover:-translate-y-0.5 font-medium text-sm">
+          <button 
+            onClick={() => navigate('/superadmin/hospitals/add')}
+            className="inline-flex items-center justify-center gap-2 px-6 py-2.5 bg-primary-500 text-white rounded-lg hover:bg-primary-600 transition-all shadow-md hover:shadow-lg hover:-translate-y-0.5 font-medium text-sm"
+          >
             <Plus size={16} />
             Register First Hospital
           </button>
