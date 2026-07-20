@@ -185,7 +185,7 @@ const Announcments = () => {
   };
 
   return (
-    <div className="animate-in fade-in zoom-in-95 duration-500 max-w-5xl mx-auto pb-10 space-y-8">
+    <div className="animate-in fade-in zoom-in-95 duration-500 mx-auto pb-10 space-y-8">
 
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>

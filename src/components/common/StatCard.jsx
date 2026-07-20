@@ -25,7 +25,7 @@ const StatCard = ({ title, value, trend, trendLabel, icon: Icon, colorTheme = 'p
             className={`group relative bg-cover bg-center rounded-3xl p-6 border-3 ${borderClass}  shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 ease-out overflow-hidden cursor-default`}
             style={{ backgroundImage: "url('/assets/kpi_background.jpg')" }}
         >
-            <div className="absolute inset-0 bg-white/85 group-hover:bg-white/75 transition-colors duration-500 z-0"></div>
+            <div className="absolute inset-0 bg-white/65 group-hover:bg-white/55 transition-colors duration-500 z-0"></div>
 
             <div className={`absolute -right-8 -top-8 w-32 h-32 rounded-full opacity-40 blur-2xl group-hover:opacity-70 transition-opacity duration-500 z-0 ${bgClass}`}></div>
 
