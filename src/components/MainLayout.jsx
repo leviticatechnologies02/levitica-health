@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
 import { Outlet } from 'react-router-dom';
-import Sidebar from './layout/Sidebar';
+import SuperadminSidebar from './layout/SuperadminSidebar';
+import AdminSidebar from './layout/AdminSidebar';
 import Header from './layout/Header';
+
+
 
 const MainLayout = ({ role = 'superadmin' }) => {
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
@@ -9,12 +12,19 @@ const MainLayout = ({ role = 'superadmin' }) => {
 
   return (
     <div className="flex min-h-screen bg-secondary-50">
-      <Sidebar 
-        role={role} 
-        isCollapsed={isSidebarCollapsed} 
-        isMobileOpen={isMobileOpen}
-        setIsMobileOpen={setIsMobileOpen}
-      />
+      {role === 'admin' ? (
+        <AdminSidebar 
+          isCollapsed={isSidebarCollapsed} 
+          isMobileOpen={isMobileOpen}
+          setIsMobileOpen={setIsMobileOpen}
+        />
+      ) : (
+        <SuperadminSidebar 
+          isCollapsed={isSidebarCollapsed} 
+          isMobileOpen={isMobileOpen}
+          setIsMobileOpen={setIsMobileOpen}
+        />
+      )}
 
       <div className={`flex-1 flex flex-col min-h-screen transition-all duration-300 ml-0 ${isSidebarCollapsed ? 'md:ml-20' : 'md:ml-64'}`}>
         <Header

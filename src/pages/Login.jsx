@@ -86,12 +86,22 @@ const Login = () => {
                 </a>
               </div>
 
-              <button
-                type="submit"
-                className="w-full mt-4 bg-gradient-to-r from-primary-500 to-primary-700 text-white font-bold text-sm py-2.5 rounded-lg hover:shadow-lg hover:shadow-primary-500/30 hover:-translate-y-0.5 transition-all duration-300"
-              >
-                Sign In
-              </button>
+              <div className="flex flex-col gap-3 mt-4">
+                <button
+                  type="button"
+                  onClick={() => navigate('/superadmin')}
+                  className="w-full bg-gradient-to-r from-primary-500 to-primary-700 text-white font-bold text-sm py-2.5 rounded-lg hover:shadow-lg hover:shadow-primary-500/30 hover:-translate-y-0.5 transition-all duration-300"
+                >
+                  Sign In as Superadmin
+                </button>
+                <button
+                  type="button"
+                  onClick={() => navigate('/admin')}
+                  className="w-full bg-white border border-primary-500 text-primary-600 font-bold text-sm py-2.5 rounded-lg hover:bg-primary-50 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300"
+                >
+                  Sign In as Hospital Admin
+                </button>
+              </div>
             </form>
           </div>
         </div>
