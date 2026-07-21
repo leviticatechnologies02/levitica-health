@@ -158,7 +158,6 @@ const Wards = () => {
   return (
     <div className="animate-in fade-in zoom-in-95 duration-500 pb-10">
       
-      {/* HEADER & ACTIONS */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
         <div>
           <h1 className="text-2xl font-bold text-slate-900 tracking-tight">Hospital Wards</h1>
@@ -171,7 +170,6 @@ const Wards = () => {
         </div>
       </div>
 
-      {/* FILTERS & SEARCH */}
       <div className="bg-white p-4 rounded-t-xl border border-slate-100 border-b-0 flex flex-col sm:flex-row justify-between items-center gap-4 shadow-sm">
         <div className="relative w-full sm:w-80">
           <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
@@ -200,7 +198,6 @@ const Wards = () => {
         </div>
       </div>
 
-      {/* DATA TABLE */}
       <div className="bg-white rounded-b-xl border border-slate-100 shadow-sm overflow-hidden overflow-x-auto">
         <Table columns={columns} data={paginatedData} className="border-0 shadow-none rounded-none" />
 
@@ -230,7 +227,6 @@ const Wards = () => {
         </div>
       </div>
 
-      {/* CREATE / EDIT MODAL */}
       <Modal
         isOpen={isFormOpen}
         onClose={() => setIsFormOpen(false)}

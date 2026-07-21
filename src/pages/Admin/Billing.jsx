@@ -1,13 +1,29 @@
 import React, { useState, useMemo } from 'react';
 import { 
-  Search, Filter, Plus, Edit2, Trash2, Receipt
+  Search, Filter, Plus, Edit2, Trash2, Receipt,
+  DollarSign, Clock, AlertTriangle, CreditCard, ChevronLeft, ChevronRight
 } from 'lucide-react';
+import { Formik, Form, Field, ErrorMessage } from 'formik';
+import * as Yup from 'yup';
+import Table from '../../components/common/Table';
+import Modal from '../../components/common/Modal';
+import StatCard from '../../components/common/StatCard';
 
 const MOCK_DATA = [
-  { id: 'INV-2023-001', patient: 'John Doe', date: '2023-10-15', amount: '$450.00', status: 'Paid', isDeleted: false },
-  { id: 'INV-2023-002', patient: 'Jane Smith', date: '2023-10-16', amount: '$120.00', status: 'Pending', isDeleted: false },
-  { id: 'INV-2023-003', patient: 'Michael Johnson', date: '2023-09-28', amount: '$3,200.00', status: 'Overdue', isDeleted: false },
+  { id: 'INV-2023-001', patient: 'John Doe', date: '2023-10-15', amount: 450.00, invoiceType: 'Consultation', paymentMethod: 'Credit Card', status: 'Paid', isDeleted: false },
+  { id: 'INV-2023-002', patient: 'Jane Smith', date: '2023-10-16', amount: 120.00, invoiceType: 'Pharmacy', paymentMethod: 'N/A', status: 'Pending', isDeleted: false },
+  { id: 'INV-2023-003', patient: 'Michael Johnson', date: '2023-09-28', amount: 3200.00, invoiceType: 'Surgery', paymentMethod: 'Insurance', status: 'Overdue', isDeleted: false },
+  { id: 'INV-2023-004', patient: 'Emily Davis', date: '2023-10-18', amount: 85.00, invoiceType: 'Lab', paymentMethod: 'Cash', status: 'Paid', isDeleted: false },
 ];
+
+const BillingSchema = Yup.object().shape({
+  patient: Yup.string().required('Patient Name is required'),
+  date: Yup.date().required('Date is required'),
+  amount: Yup.number().min(0, 'Amount cannot be negative').required('Amount is required'),
+  invoiceType: Yup.string().required('Invoice Type is required'),
+  paymentMethod: Yup.string().required('Payment Method is required'),
+  status: Yup.string().required('Status is required'),
+});
 
 const Billing = () => {
   const [data, setData] = useState(MOCK_DATA);
@@ -19,9 +35,6 @@ const Billing = () => {
 
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [selectedRecord, setSelectedRecord] = useState(null);
-  
-  const initialForm = { patient: '', date: '', amount: '', status: 'Pending' };
-  const [formData, setFormData] = useState(initialForm);
 
   const handleSort = (key) => {
     let direction = 'asc';
@@ -36,25 +49,23 @@ const Billing = () => {
   };
 
   const openCreate = () => {
-    setFormData(initialForm);
     setSelectedRecord(null);
     setIsFormOpen(true);
   };
 
   const openEdit = (record) => {
-    setFormData(record);
     setSelectedRecord(record);
     setIsFormOpen(true);
   };
 
-  const handleSave = (e) => {
-    e.preventDefault();
+  const handleSubmit = (values, { setSubmitting }) => {
     if (selectedRecord) {
-      setData(data.map(item => item.id === selectedRecord.id ? { ...formData, id: item.id, isDeleted: item.isDeleted } : item));
+      setData(data.map(item => item.id === selectedRecord.id ? { ...values, id: item.id, isDeleted: item.isDeleted } : item));
     } else {
-      setData([{ ...formData, id: `INV-2023-0${Math.floor(Math.random() * 90) + 10}`, isDeleted: false }, ...data]);
+      setData([{ ...values, id: `INV-2023-0${Math.floor(Math.random() * 900) + 100}`, isDeleted: false }, ...data]);
     }
     setIsFormOpen(false);
+    setSubmitting(false);
   };
 
   const filteredData = useMemo(() => {
@@ -73,6 +84,11 @@ const Billing = () => {
 
   const totalPages = Math.ceil(filteredData.length / rowsPerPage);
   const paginatedData = filteredData.slice((page - 1) * rowsPerPage, page * rowsPerPage);
+
+  const totalRevenue = data.filter(d => !d.isDeleted && d.status === 'Paid').reduce((acc, curr) => acc + curr.amount, 0);
+  const pendingAmount = data.filter(d => !d.isDeleted && d.status === 'Pending').reduce((acc, curr) => acc + curr.amount, 0);
+  const overdueAmount = data.filter(d => !d.isDeleted && d.status === 'Overdue').reduce((acc, curr) => acc + curr.amount, 0);
+  const totalInvoices = data.filter(d => !d.isDeleted).length;
 
   const getStatusBadge = (status) => {
     switch (status) {
@@ -96,6 +112,58 @@ const Billing = () => {
     }
   };
 
+  const columns = [
+    {
+      header: 'Invoice ID',
+      accessor: 'id',
+      render: (item) => <span className="font-medium text-slate-900">{item.id}</span>
+    },
+    {
+      header: 'Patient',
+      accessor: 'patient',
+      render: (item) => (
+        <div className="flex items-center gap-3">
+          <div className="w-8 h-8 rounded-lg bg-primary-50 flex items-center justify-center text-primary-600">
+            <Receipt className="w-4 h-4" />
+          </div>
+          <span className="text-sm font-bold text-slate-900">{item.patient}</span>
+        </div>
+      )
+    },
+    { header: 'Date', accessor: 'date' },
+    { header: 'Type', accessor: 'invoiceType' },
+    { 
+      header: 'Amount', 
+      accessor: 'amount',
+      render: (item) => <span className="font-medium text-slate-900">${item.amount.toFixed(2)}</span>
+    },
+    { header: 'Payment Method', accessor: 'paymentMethod' },
+    {
+      header: 'Status',
+      accessor: 'status',
+      render: (item) => (
+        <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium border ${getStatusBadge(item.status)}`}>
+          <div className={`w-1.5 h-1.5 rounded-full ${getStatusDot(item.status)}`}></div>
+          {item.status}
+        </span>
+      )
+    },
+    {
+      header: <div className="text-right">Actions</div>,
+      accessor: 'actions',
+      render: (item) => (
+        <div className="flex items-center justify-end gap-2 group-hover:opacity-100 transition-opacity">
+          <button onClick={() => openEdit(item)} className="p-1.5 text-slate-400 hover:text-amber-600 hover:bg-amber-50 rounded-lg transition-colors" title="Edit">
+            <Edit2 className="w-4 h-4" />
+          </button>
+          <button onClick={() => handleSoftDelete(item.id)} className="p-1.5 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-colors" title="Delete">
+            <Trash2 className="w-4 h-4" />
+          </button>
+        </div>
+      )
+    }
+  ];
+
   return (
     <div className="animate-in fade-in zoom-in-95 duration-500 pb-10">
       
@@ -116,6 +184,13 @@ const Billing = () => {
             <Plus className="w-4 h-4" /> Create Invoice
           </button>
         </div>
+      </div>
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+        <StatCard title="Total Invoices" value={totalInvoices} icon={Receipt} colorTheme="blue" />
+        <StatCard title="Revenue (Paid)" value={`$${totalRevenue.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}`} icon={DollarSign} colorTheme="emerald" />
+        <StatCard title="Pending Amount" value={`$${pendingAmount.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}`} icon={Clock} colorTheme="amber" />
+        <StatCard title="Overdue Amount" value={`$${overdueAmount.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}`} icon={AlertTriangle} colorTheme="rose" />
       </div>
 
       {/* FILTERS & SEARCH */}
@@ -149,105 +224,145 @@ const Billing = () => {
       </div>
 
       {/* DATA TABLE */}
-      <div className="bg-white rounded-b-xl border border-slate-100 shadow-sm overflow-hidden overflow-x-auto">
-        <table className="w-full text-left border-collapse">
-          <thead>
-            <tr className="bg-slate-50 border-b border-slate-100 text-xs uppercase tracking-wider text-slate-500 font-semibold">
-              <th className="px-6 py-4 cursor-pointer hover:bg-slate-100 transition-colors" onClick={() => handleSort('id')}>Invoice ID</th>
-              <th className="px-6 py-4 cursor-pointer hover:bg-slate-100 transition-colors" onClick={() => handleSort('patient')}>Patient</th>
-              <th className="px-6 py-4 cursor-pointer hover:bg-slate-100 transition-colors" onClick={() => handleSort('date')}>Date</th>
-              <th className="px-6 py-4 cursor-pointer hover:bg-slate-100 transition-colors" onClick={() => handleSort('amount')}>Amount</th>
-              <th className="px-6 py-4 cursor-pointer hover:bg-slate-100 transition-colors" onClick={() => handleSort('status')}>Status</th>
-              <th className="px-6 py-4 text-right">Actions</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-slate-100">
-            {paginatedData.length > 0 ? paginatedData.map((item) => (
-              <tr key={item.id} className="hover:bg-slate-50/50 transition-colors group">
-                <td className="px-6 py-4 text-sm font-medium text-slate-900">{item.id}</td>
-                <td className="px-6 py-4">
-                  <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-lg bg-primary-50 flex items-center justify-center text-primary-600">
-                      <Receipt className="w-4 h-4" />
-                    </div>
-                    <span className="text-sm font-bold text-slate-900">{item.patient}</span>
-                  </div>
-                </td>
-                <td className="px-6 py-4 text-sm text-slate-600">{item.date}</td>
-                <td className="px-6 py-4 text-sm text-slate-900 font-medium">{item.amount}</td>
-                <td className="px-6 py-4">
-                  <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium border ${getStatusBadge(item.status)}`}>
-                    <div className={`w-1.5 h-1.5 rounded-full ${getStatusDot(item.status)}`}></div>
-                    {item.status}
-                  </span>
-                </td>
-                <td className="px-6 py-4 text-right">
-                  <div className="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                    <button onClick={() => openEdit(item)} className="p-1.5 text-slate-400 hover:text-amber-600 hover:bg-amber-50 rounded-lg transition-colors" title="Edit">
-                      <Edit2 className="w-4 h-4" />
-                    </button>
-                    <button onClick={() => handleSoftDelete(item.id)} className="p-1.5 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-colors" title="Delete">
-                      <Trash2 className="w-4 h-4" />
-                    </button>
-                  </div>
-                </td>
-              </tr>
-            )) : (
-              <tr>
-                <td colSpan="6" className="px-6 py-12 text-center text-slate-500">
-                  <p className="text-sm font-medium text-slate-900">No records found</p>
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
+      <div className="bg-white rounded-b-xl border border-slate-100 border-t-0 shadow-sm overflow-hidden">
+        <Table columns={columns} data={paginatedData} className="border-0 shadow-none rounded-none" />
+
+        <div className="px-6 py-4 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-4 bg-slate-50/50">
+          <p className="text-sm text-slate-500 text-center sm:text-left">
+            Showing <span className="font-medium text-slate-900">{filteredData.length > 0 ? (page - 1) * rowsPerPage + 1 : 0}</span> to <span className="font-medium text-slate-900">{Math.min(page * rowsPerPage, filteredData.length)}</span> of <span className="font-medium text-slate-900">{filteredData.length}</span> results
+          </p>
+          <div className="flex items-center gap-1">
+            <button
+              onClick={() => setPage(p => Math.max(1, p - 1))}
+              disabled={page === 1}
+              className="p-1.5 rounded-lg border border-slate-200 text-slate-500 hover:bg-slate-100 disabled:opacity-50 disabled:cursor-not-allowed bg-white"
+            >
+              <ChevronLeft className="w-4 h-4" />
+            </button>
+            <div className="px-3 py-1.5 text-sm font-medium text-slate-700">
+              Page {page} of {totalPages || 1}
+            </div>
+            <button
+              onClick={() => setPage(p => Math.min(totalPages, p + 1))}
+              disabled={page === totalPages || totalPages === 0}
+              className="p-1.5 rounded-lg border border-slate-200 text-slate-500 hover:bg-slate-100 disabled:opacity-50 disabled:cursor-not-allowed bg-white"
+            >
+              <ChevronRight className="w-4 h-4" />
+            </button>
+          </div>
+        </div>
       </div>
 
       {/* CREATE / EDIT MODAL */}
-      {isFormOpen && (
-        <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-in fade-in duration-200">
-          <div className="bg-white rounded-2xl shadow-xl w-full max-w-md overflow-hidden animate-in zoom-in-95 duration-200">
-            <div className="px-6 py-4 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
-              <h2 className="text-lg font-bold text-slate-900">{selectedRecord ? 'Edit Invoice' : 'Create Invoice'}</h2>
-              <button onClick={() => setIsFormOpen(false)} className="text-slate-400 hover:text-slate-600 transition-colors">
-                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
-              </button>
-            </div>
-            <form onSubmit={handleSave} className="p-6">
+      <Modal
+        isOpen={isFormOpen}
+        onClose={() => setIsFormOpen(false)}
+        title={selectedRecord ? 'Edit Invoice' : 'Create Invoice'}
+      >
+        <Formik
+          initialValues={selectedRecord || { patient: '', date: '', amount: 0, invoiceType: 'Consultation', paymentMethod: 'N/A', status: 'Pending' }}
+          validationSchema={BillingSchema}
+          onSubmit={handleSubmit}
+        >
+          {({ isSubmitting, errors, touched, values, setFieldValue }) => (
+            <Form className="p-6">
               <div className="space-y-4">
                 <div>
                   <label className="block text-sm font-medium text-slate-700 mb-1">Patient Name</label>
-                  <input required type="text" className="w-full px-4 py-2 border border-slate-200 rounded-lg text-sm focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 outline-none" value={formData.patient} onChange={e => setFormData({...formData, patient: e.target.value})} />
+                  <Field
+                    name="patient"
+                    type="text"
+                    placeholder="e.g. John Doe"
+                    className={`w-full px-4 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 outline-none ${errors.patient && touched.patient ? 'border-red-500' : 'border-slate-200'}`}
+                  />
+                  <ErrorMessage name="patient" component="div" className="text-red-500 text-xs mt-1" />
                 </div>
+                
                 <div className="grid grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-medium text-slate-700 mb-1">Date</label>
-                    <input required type="date" className="w-full px-4 py-2 border border-slate-200 rounded-lg text-sm focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 outline-none" value={formData.date} onChange={e => setFormData({...formData, date: e.target.value})} />
+                    <Field
+                      name="date"
+                      type="date"
+                      className={`w-full px-4 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 outline-none ${errors.date && touched.date ? 'border-red-500' : 'border-slate-200'}`}
+                    />
+                    <ErrorMessage name="date" component="div" className="text-red-500 text-xs mt-1" />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-slate-700 mb-1">Amount</label>
-                    <input required type="text" className="w-full px-4 py-2 border border-slate-200 rounded-lg text-sm focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 outline-none" value={formData.amount} onChange={e => setFormData({...formData, amount: e.target.value})} />
+                    <label className="block text-sm font-medium text-slate-700 mb-1">Amount ($)</label>
+                    <Field
+                      name="amount"
+                      type="number"
+                      step="0.01"
+                      className={`w-full px-4 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 outline-none ${errors.amount && touched.amount ? 'border-red-500' : 'border-slate-200'}`}
+                    />
+                    <ErrorMessage name="amount" component="div" className="text-red-500 text-xs mt-1" />
                   </div>
                 </div>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-slate-700 mb-1">Invoice Type</label>
+                    <Field
+                      as="select"
+                      name="invoiceType"
+                      className={`w-full px-4 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 outline-none ${errors.invoiceType && touched.invoiceType ? 'border-red-500' : 'border-slate-200'}`}
+                    >
+                      <option value="Consultation">Consultation</option>
+                      <option value="Pharmacy">Pharmacy</option>
+                      <option value="Lab">Lab Test</option>
+                      <option value="Surgery">Surgery</option>
+                      <option value="Room">Room/Ward</option>
+                    </Field>
+                    <ErrorMessage name="invoiceType" component="div" className="text-red-500 text-xs mt-1" />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-slate-700 mb-1">Payment Method</label>
+                    <Field
+                      as="select"
+                      name="paymentMethod"
+                      className={`w-full px-4 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 outline-none ${errors.paymentMethod && touched.paymentMethod ? 'border-red-500' : 'border-slate-200'}`}
+                    >
+                      <option value="N/A">N/A (Pending)</option>
+                      <option value="Cash">Cash</option>
+                      <option value="Credit Card">Credit Card</option>
+                      <option value="Insurance">Insurance</option>
+                    </Field>
+                    <ErrorMessage name="paymentMethod" component="div" className="text-red-500 text-xs mt-1" />
+                  </div>
+                </div>
+
                 <div>
                   <label className="block text-sm font-medium text-slate-700 mb-1">Status</label>
-                  <select className="w-full px-4 py-2 border border-slate-200 rounded-lg text-sm focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 outline-none" value={formData.status} onChange={e => setFormData({...formData, status: e.target.value})}>
+                  <Field
+                    as="select"
+                    name="status"
+                    className={`w-full px-4 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 outline-none ${errors.status && touched.status ? 'border-red-500' : 'border-slate-200'}`}
+                    onChange={(e) => {
+                      setFieldValue('status', e.target.value);
+                      if (e.target.value === 'Paid' && values.paymentMethod === 'N/A') {
+                        setFieldValue('paymentMethod', 'Cash'); // Auto update default
+                      }
+                    }}
+                  >
                     <option value="Paid">Paid</option>
                     <option value="Pending">Pending</option>
                     <option value="Overdue">Overdue</option>
-                  </select>
+                  </Field>
+                  <ErrorMessage name="status" component="div" className="text-red-500 text-xs mt-1" />
                 </div>
               </div>
+
               <div className="mt-8 flex justify-end gap-3">
                 <button type="button" onClick={() => setIsFormOpen(false)} className="px-4 py-2 text-sm font-medium text-slate-600 bg-white border border-slate-200 rounded-lg hover:bg-slate-50 transition-colors">Cancel</button>
-                <button type="submit" className="px-4 py-2 text-sm font-medium text-white bg-primary-600 rounded-lg hover:bg-primary-700 shadow-sm shadow-primary-600/20 transition-colors">
-                  {selectedRecord ? 'Update' : 'Create Invoice'}
+                <button type="submit" disabled={isSubmitting} className="px-4 py-2 text-sm font-medium text-white bg-primary-600 rounded-lg hover:bg-primary-700 shadow-sm shadow-primary-600/20 transition-colors disabled:opacity-70">
+                  {isSubmitting ? 'Saving...' : (selectedRecord ? 'Update' : 'Create Invoice')}
                 </button>
               </div>
-            </form>
-          </div>
-        </div>
-      )}
+            </Form>
+          )}
+        </Formik>
+      </Modal>
 
     </div>
   );

@@ -15,7 +15,7 @@ const MOCK_DATA = Array.from({ length: 45 }, (_, i) => {
   let status = 'In Stock';
   if (stock === 0) status = 'Out of Stock';
   else if (stock < 20) status = 'Low Stock';
-  
+
   return {
     id: `DRUG-${1000 + i}`,
     name: ['Amoxicillin 500mg', 'Ibuprofen 400mg', 'Lisinopril 10mg', 'Metformin 500mg', 'Atorvastatin 20mg', 'Omeprazole 20mg', 'Azithromycin 250mg', 'Amlodipine 5mg'][i % 8],
@@ -209,7 +209,7 @@ const Pharmacy = () => {
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-        <StatCard title="Total Drugs" value={totalDrugs} icon={Pill} colorTheme="blue" />
+        <StatCard title="Total Medicines" value={totalDrugs} icon={Pill} colorTheme="blue" />
         <StatCard title="In Stock" value={inStock} icon={CheckCircle} colorTheme="green" />
         <StatCard title="Low Stock" value={lowStock} icon={AlertTriangle} colorTheme="amber" />
         <StatCard title="Out of Stock" value={outOfStock} icon={XCircle} colorTheme="rose" />
@@ -284,7 +284,7 @@ const Pharmacy = () => {
           onSubmit={handleSubmit}
         >
           {({ isSubmitting, errors, touched, setFieldValue, values }) => {
-            
+
             // Auto-update status based on stock level
             React.useEffect(() => {
               if (values.stock === 0) {
@@ -297,94 +297,95 @@ const Pharmacy = () => {
             }, [values.stock, setFieldValue]);
 
             return (
-            <Form className="p-6">
-              <div className="space-y-4">
-                <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-1">Drug Name</label>
-                  <Field
-                    name="name"
-                    type="text"
-                    placeholder="e.g. Amoxicillin 500mg"
-                    className={`w-full px-4 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 outline-none ${errors.name && touched.name ? 'border-red-500' : 'border-slate-200'}`}
-                  />
-                  <ErrorMessage name="name" component="div" className="text-red-500 text-xs mt-1" />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-1">Category</label>
-                  <Field
-                    as="select"
-                    name="category"
-                    className={`w-full px-4 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 outline-none ${errors.category && touched.category ? 'border-red-500' : 'border-slate-200'}`}
-                  >
-                    <option value="">Select Category...</option>
-                    <option value="Antibiotic">Antibiotic</option>
-                    <option value="Painkiller">Painkiller</option>
-                    <option value="Blood Pressure">Blood Pressure</option>
-                    <option value="Diabetes">Diabetes</option>
-                    <option value="Cholesterol">Cholesterol</option>
-                    <option value="Antacid">Antacid</option>
-                  </Field>
-                  <ErrorMessage name="category" component="div" className="text-red-500 text-xs mt-1" />
-                </div>
-
-                <div className="grid grid-cols-2 gap-4">
+              <Form className="p-6">
+                <div className="space-y-4">
                   <div>
-                    <label className="block text-sm font-medium text-slate-700 mb-1">Stock Level</label>
+                    <label className="block text-sm font-medium text-slate-700 mb-1">Drug Name</label>
                     <Field
-                      name="stock"
-                      type="number"
-                      className={`w-full px-4 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 outline-none ${errors.stock && touched.stock ? 'border-red-500' : 'border-slate-200'}`}
-                    />
-                    <ErrorMessage name="stock" component="div" className="text-red-500 text-xs mt-1" />
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-slate-700 mb-1">Price</label>
-                    <Field
-                      name="price"
+                      name="name"
                       type="text"
-                      placeholder="$0.00"
-                      className={`w-full px-4 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 outline-none ${errors.price && touched.price ? 'border-red-500' : 'border-slate-200'}`}
+                      placeholder="e.g. Amoxicillin 500mg"
+                      className={`w-full px-4 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 outline-none ${errors.name && touched.name ? 'border-red-500' : 'border-slate-200'}`}
                     />
-                    <ErrorMessage name="price" component="div" className="text-red-500 text-xs mt-1" />
+                    <ErrorMessage name="name" component="div" className="text-red-500 text-xs mt-1" />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-slate-700 mb-1">Category</label>
+                    <Field
+                      as="select"
+                      name="category"
+                      className={`w-full px-4 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 outline-none ${errors.category && touched.category ? 'border-red-500' : 'border-slate-200'}`}
+                    >
+                      <option value="">Select Category...</option>
+                      <option value="Antibiotic">Antibiotic</option>
+                      <option value="Painkiller">Painkiller</option>
+                      <option value="Blood Pressure">Blood Pressure</option>
+                      <option value="Diabetes">Diabetes</option>
+                      <option value="Cholesterol">Cholesterol</option>
+                      <option value="Antacid">Antacid</option>
+                    </Field>
+                    <ErrorMessage name="category" component="div" className="text-red-500 text-xs mt-1" />
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium text-slate-700 mb-1">Stock Level</label>
+                      <Field
+                        name="stock"
+                        type="number"
+                        className={`w-full px-4 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 outline-none ${errors.stock && touched.stock ? 'border-red-500' : 'border-slate-200'}`}
+                      />
+                      <ErrorMessage name="stock" component="div" className="text-red-500 text-xs mt-1" />
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-slate-700 mb-1">Price</label>
+                      <Field
+                        name="price"
+                        type="text"
+                        placeholder="$0.00"
+                        className={`w-full px-4 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 outline-none ${errors.price && touched.price ? 'border-red-500' : 'border-slate-200'}`}
+                      />
+                      <ErrorMessage name="price" component="div" className="text-red-500 text-xs mt-1" />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-slate-700 mb-1">Status (Auto-calculated)</label>
+                    <Field
+                      as="select"
+                      name="status"
+                      disabled
+                      className={`w-full px-4 py-2 border rounded-lg text-sm bg-slate-50 text-slate-500 cursor-not-allowed outline-none ${errors.status && touched.status ? 'border-red-500' : 'border-slate-200'}`}
+                    >
+                      <option value="In Stock">In Stock</option>
+                      <option value="Low Stock">Low Stock</option>
+                      <option value="Out of Stock">Out of Stock</option>
+                    </Field>
+                    <ErrorMessage name="status" component="div" className="text-red-500 text-xs mt-1" />
                   </div>
                 </div>
-                
-                <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-1">Status (Auto-calculated)</label>
-                  <Field
-                    as="select"
-                    name="status"
-                    disabled
-                    className={`w-full px-4 py-2 border rounded-lg text-sm bg-slate-50 text-slate-500 cursor-not-allowed outline-none ${errors.status && touched.status ? 'border-red-500' : 'border-slate-200'}`}
-                  >
-                    <option value="In Stock">In Stock</option>
-                    <option value="Low Stock">Low Stock</option>
-                    <option value="Out of Stock">Out of Stock</option>
-                  </Field>
-                  <ErrorMessage name="status" component="div" className="text-red-500 text-xs mt-1" />
-                </div>
-              </div>
 
-              <div className="mt-8 flex justify-end gap-3">
-                <button
-                  type="button"
-                  onClick={() => setIsFormOpen(false)}
-                  className="px-4 py-2 text-sm font-medium text-slate-600 bg-white border border-slate-200 rounded-lg hover:bg-slate-50 transition-colors"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  disabled={isSubmitting}
-                  className="px-4 py-2 text-sm font-medium text-white bg-primary-600 rounded-lg hover:bg-primary-700 shadow-sm shadow-primary-600/20 transition-colors disabled:opacity-70"
-                >
-                  {isSubmitting ? 'Saving...' : (selectedRecord ? 'Update Drug' : 'Add Drug')}
-                </button>
-              </div>
-            </Form>
-          )}}
+                <div className="mt-8 flex justify-end gap-3">
+                  <button
+                    type="button"
+                    onClick={() => setIsFormOpen(false)}
+                    className="px-4 py-2 text-sm font-medium text-slate-600 bg-white border border-slate-200 rounded-lg hover:bg-slate-50 transition-colors"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    disabled={isSubmitting}
+                    className="px-4 py-2 text-sm font-medium text-white bg-primary-600 rounded-lg hover:bg-primary-700 shadow-sm shadow-primary-600/20 transition-colors disabled:opacity-70"
+                  >
+                    {isSubmitting ? 'Saving...' : (selectedRecord ? 'Update Drug' : 'Add Drug')}
+                  </button>
+                </div>
+              </Form>
+            )
+          }}
         </Formik>
       </Modal>
 

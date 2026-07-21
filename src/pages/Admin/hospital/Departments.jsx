@@ -9,7 +9,6 @@ import * as Yup from 'yup';
 import Table from '../../../components/common/Table';
 import Modal from '../../../components/common/Modal';
 
-// --- MOCK DATA ---
 const MOCK_DATA = [
   { id: 'DEPT-001', name: 'Cardiology', head: 'Dr. Smith A.', contact: '+1 555-0101', status: 'Active', isDeleted: false, createdAt: '2023-01-15' },
   { id: 'DEPT-002', name: 'Neurology', head: 'Dr. Johnson B.', contact: '+1 555-0102', status: 'Active', isDeleted: false, createdAt: '2023-02-20' },
@@ -33,7 +32,6 @@ const Departments = () => {
   const rowsPerPage = 10;
   const [sortConfig, setSortConfig] = useState({ key: 'name', direction: 'asc' });
 
-  // Modals
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [selectedRecord, setSelectedRecord] = useState(null);
 
@@ -161,7 +159,6 @@ const Departments = () => {
   return (
     <div className="animate-in fade-in zoom-in-95 duration-500 pb-10">
       
-      {/* HEADER & ACTIONS */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
         <div>
           <h1 className="text-2xl font-bold text-slate-900 tracking-tight">Departments Management</h1>
@@ -174,7 +171,6 @@ const Departments = () => {
         </div>
       </div>
 
-      {/* FILTERS & SEARCH */}
       <div className="bg-white p-4 rounded-t-xl border border-slate-100 border-b-0 flex flex-col sm:flex-row justify-between items-center gap-4 shadow-sm">
         <div className="relative w-full sm:w-80">
           <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
@@ -203,7 +199,6 @@ const Departments = () => {
         </div>
       </div>
 
-      {/* DATA TABLE */}
       <div className="bg-white rounded-b-xl border border-slate-100 shadow-sm overflow-hidden overflow-x-auto">
         <Table columns={columns} data={paginatedData} className="border-0 shadow-none rounded-none" />
 
@@ -233,7 +228,6 @@ const Departments = () => {
         </div>
       </div>
 
-      {/* CREATE / EDIT MODAL */}
       <Modal
         isOpen={isFormOpen}
         onClose={() => setIsFormOpen(false)}

@@ -5,7 +5,6 @@ const AdminProfile = () => {
   return (
     <div className="animate-in fade-in zoom-in-95 duration-500 pb-10">
       
-      {/* DEV NOTE */}
       <div className="bg-indigo-50 border border-indigo-100 p-4 rounded-xl mb-6">
         <h3 className="text-indigo-800 font-semibold mb-1">Module Note: Admin Profile</h3>
         <p className="text-indigo-600 text-sm"><strong>Flow/Usefulness:</strong> A dedicated profile section ensures that the hospital admin can securely update their credentials, set up Two-Factor Authentication (2FA), and review their own recent activity logs to maintain strict account security.</p>
@@ -20,7 +19,6 @@ const AdminProfile = () => {
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         
-        {/* PROFILE CARD */}
         <div className="col-span-1 space-y-6">
           <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-6 flex flex-col items-center text-center">
             <div className="relative mb-4 group cursor-pointer">
@@ -48,7 +46,6 @@ const AdminProfile = () => {
           </div>
         </div>
 
-        {/* DETAILS FORM */}
         <div className="col-span-1 lg:col-span-2 space-y-6">
           <div className="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
             <div className="px-6 py-5 border-b border-slate-100 bg-slate-50/50">
