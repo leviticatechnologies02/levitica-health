@@ -297,3 +297,44 @@ export const REGION_ADMIN_NAV = [
     icon: User,
   }
 ];
+
+export const GROUP_ADMIN_NAV = [
+  {
+    name: 'Dashboard',
+    path: '/groupAdmin',
+    icon: LayoutDashboard,
+  },
+  {
+    name: 'Branch Management',
+    icon: Building2,
+    children: [
+      { name: 'Branches', path: '/groupAdmin/branches', icon: Building2 },
+      { name: 'Branch Admins', path: '/groupAdmin/branch-admins', icon: UserCheck },
+    ]
+  },
+  {
+    name: 'Patients',
+    path: '/groupAdmin/patients',
+    icon: UsersRound,
+  },
+  {
+    name: 'Reports',
+    path: '/groupAdmin/reports',
+    icon: BarChart2,
+  },
+  {
+    name: 'Notifications',
+    path: '/groupAdmin/announcements',
+    icon: Megaphone,
+  },
+  {
+    name: 'Settings',
+    path: '/groupAdmin/settings',
+    icon: Settings,
+  },
+  {
+    name: 'My Profile',
+    path: '/groupAdmin/profile',
+    icon: User,
+  }
+];
