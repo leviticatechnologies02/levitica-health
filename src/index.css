@@ -7,20 +7,28 @@
   height: 6px;
 }
 
+::-webkit-scrollbar:hidden {
+  width: 0px;
+  height: 0px;
+}
+
 ::-webkit-scrollbar-track {
-  background: #f8fafc; /* slate-50 */
+  background: #f8fafc;
+  /* slate-50 */
   border-radius: 10px;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #cbd5e1; /* slate-300 */
+  background: #cbd5e1;
+  /* slate-300 */
   border-radius: 10px;
   transition: background-color 0.3s ease;
 }
 
 /* Hover state using Levitica's primary orange */
 ::-webkit-scrollbar-thumb:hover {
-  background: #f95e09; /* primary-500 */
+  background: #f95e09;
+  /* primary-500 */
 }
 
 /* Firefox compatibility */

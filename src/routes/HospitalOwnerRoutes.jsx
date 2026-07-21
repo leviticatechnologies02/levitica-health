@@ -57,13 +57,9 @@ const HospitalOwnerRoutes = () => {
                 <Route path="hospitals/create" element={<HospitalCreate />} />
                 <Route path="hospitals/branch-heads" element={<HospitalBranchHeads />} />
 
-                <Route path="users/organization-users" element={<OrgUsers />} />
-                <Route path="users/role-management" element={<RoleManagement />} />
-                <Route path="users/permission-management" element={<PermissionManagement />} />
+                <Route path="users" element={<OrgUsers />} />
 
-                <Route path="subscription/plans" element={<SubPlans />} />
-                <Route path="subscription/billing" element={<SubBilling />} />
-                <Route path="subscription/licenses" element={<SubLicenses />} />
+                <Route path="subscription" element={<SubPlans />} />
 
                 <Route path="reports/organization" element={<RepOrganization />} />
                 <Route path="reports/hospital" element={<RepHospital />} />

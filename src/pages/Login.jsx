@@ -1,7 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
-const Login = () => { 
+const Login = () => {
   const navigate = useNavigate();
   return (
     <div className="min-h-screen relative flex items-center justify-center p-4 sm:p-8">
@@ -86,27 +86,34 @@ const Login = () => {
                 </a>
               </div>
 
-              <div className="flex flex-col gap-3 mt-4">
+              <div className="grid grid-cols-2 gap-3 mt-4">
                 <button
                   type="button"
                   onClick={() => navigate('/superadmin')}
-                  className="w-full bg-gradient-to-r from-primary-500 to-primary-700 text-white font-bold text-sm py-2.5 rounded-lg hover:shadow-lg hover:shadow-primary-500/30 hover:-translate-y-0.5 transition-all duration-300"
+                  className="w-full bg-white border border-primary-300 text-primary-600 font-bold text-xs py-2.5 rounded-lg hover:shadow-lg hover:shadow-primary-500/30 hover:-translate-y-0.5 transition-all duration-300"
                 >
                   Sign In as Superadmin
                 </button>
                 <button
                   type="button"
-                  onClick={() => navigate('/admin')}
-                  className="w-full bg-white border border-primary-500 text-primary-600 font-bold text-sm py-2.5 rounded-lg hover:bg-primary-50 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300"
+                  onClick={() => navigate('/hospital-owner')}
+                  className="w-full bg-white border border-secondary-300 text-secondary-700 font-bold text-xs py-2.5 rounded-lg hover:bg-secondary-50 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300"
                 >
-                  Sign In as Hospital Admin
+                  Sign In as Hospital Owner
                 </button>
                 <button
                   type="button"
-                  onClick={() => navigate('/hospital-owner')}
-                  className="w-full bg-white border border-secondary-300 text-secondary-700 font-bold text-sm py-2.5 rounded-lg hover:bg-secondary-50 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300"
+                  onClick={() => navigate('/regionAdmin')}
+                  className="w-full bg-white border border-secondary-300 text-secondary-700 font-bold text-xs py-2.5 rounded-lg hover:bg-secondary-50 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300"
                 >
-                  Sign In as Hospital Owner
+                  Sign In as Region Admin
+                </button>
+                <button
+                  type="button"
+                  onClick={() => navigate('/admin')}
+                  className="w-full bg-white border border-primary-500 text-primary-600 font-bold text-xs py-2.5 rounded-lg hover:bg-primary-50 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300"
+                >
+                  Sign In as Branch Admin
                 </button>
               </div>
             </form>

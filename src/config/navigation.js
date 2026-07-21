@@ -189,15 +189,6 @@ export const HOSPITAL_OWNER_NAV = [
     icon: LayoutDashboard,
   },
   {
-    name: 'Organization',
-    icon: Building,
-    children: [
-      { name: 'Organization Profile', path: '/hospital-owner/organization/profile', icon: UserCog },
-      { name: 'Organization Settings', path: '/hospital-owner/organization/settings', icon: Settings },
-      { name: 'Branding', path: '/hospital-owner/organization/branding', icon: Palette },
-    ]
-  },
-  {
     name: 'Regions',
     icon: Map,
     children: [
@@ -224,21 +215,13 @@ export const HOSPITAL_OWNER_NAV = [
   },
   {
     name: 'Users',
-    icon: UsersRound,
-    children: [
-      { name: 'Organization Users', path: '/hospital-owner/users/organization-users', icon: Users },
-      { name: 'Role Management', path: '/hospital-owner/users/role-management', icon: Shield },
-      { name: 'Permission Management', path: '/hospital-owner/users/permission-management', icon: Key },
-    ]
+    path: '/hospital-owner/users',
+    icon: UsersRound
   },
   {
     name: 'Subscription',
-    icon: CreditCard,
-    children: [
-      { name: 'Plans', path: '/hospital-owner/subscription/plans', icon: ClipboardList },
-      { name: 'Billing', path: '/hospital-owner/subscription/billing', icon: Receipt },
-      { name: 'Licenses', path: '/hospital-owner/subscription/licenses', icon: FileText },
-    ]
+    path: '/hospital-owner/subscription',
+    icon: CreditCard
   },
   {
     name: 'Reports',
@@ -250,22 +233,9 @@ export const HOSPITAL_OWNER_NAV = [
     ]
   },
   {
-    name: 'Compliance',
-    icon: ShieldCheck,
-    children: [
-      { name: 'Licenses', path: '/hospital-owner/compliance/licenses', icon: FileText },
-      { name: 'Audit Logs', path: '/hospital-owner/compliance/audit-logs', icon: ListChecks },
-    ]
-  },
-  {
     name: 'Notifications',
     path: '/hospital-owner/notifications',
     icon: Bell,
-  },
-  {
-    name: 'Integrations',
-    path: '/hospital-owner/integrations',
-    icon: Link,
   },
   {
     name: 'Settings',
@@ -275,6 +245,55 @@ export const HOSPITAL_OWNER_NAV = [
   {
     name: 'Profile',
     path: '/hospital-owner/profile',
+    icon: User,
+  }
+];
+
+export const REGION_ADMIN_NAV = [
+  {
+    name: 'Dashboard',
+    path: '/regionAdmin',
+    icon: LayoutDashboard,
+  },
+  {
+    name: 'Group Management',
+    icon: Building,
+    children: [
+      { name: 'Groups', path: '/regionAdmin/groups', icon: Users },
+      { name: 'Group Admins', path: '/regionAdmin/group-admins', icon: UserCheck },
+    ]
+  },
+  {
+    name: 'Branch Management',
+    icon: Building2,
+    children: [
+      { name: 'Branches', path: '/regionAdmin/branches', icon: Building2 },
+      { name: 'Branch Admins', path: '/regionAdmin/branch-admins', icon: UserCheck },
+    ]
+  },
+  {
+    name: 'Patients',
+    path: '/regionAdmin/patients',
+    icon: UsersRound,
+  },
+  {
+    name: 'Reports',
+    path: '/regionAdmin/reports',
+    icon: BarChart2,
+  },
+  {
+    name: 'Announcements',
+    path: '/regionAdmin/announcements',
+    icon: Megaphone,
+  },
+  {
+    name: 'Settings',
+    path: '/regionAdmin/settings',
+    icon: Settings,
+  },
+  {
+    name: 'My Profile',
+    path: '/regionAdmin/profile',
     icon: User,
   }
 ];

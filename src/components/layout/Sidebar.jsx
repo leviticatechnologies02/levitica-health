@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
-import { SUPERADMIN_NAV, ADMIN_NAV } from '../../config/navigation';
+import { SUPERADMIN_NAV, ADMIN_NAV, HOSPITAL_OWNER_NAV, REGION_ADMIN_NAV } from '../../config/navigation';
 import { LogOut, ChevronDown, ChevronRight } from 'lucide-react';
 
 const Sidebar = ({ role = 'superadmin', isCollapsed, isMobileOpen, setIsMobileOpen }) => {
-  const navItems = role === 'superadmin' ? SUPERADMIN_NAV : (role === 'admin' ? ADMIN_NAV : []);
+  const navItems = role === 'superadmin' ? SUPERADMIN_NAV 
+    : (role === 'admin' ? ADMIN_NAV 
+    : (role === 'hospitalOwner' ? HOSPITAL_OWNER_NAV 
+    : (role === 'regionAdmin' ? REGION_ADMIN_NAV : [])));
   const [openMenus, setOpenMenus] = useState({});
   const location = useLocation();
 
