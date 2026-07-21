@@ -2,6 +2,7 @@ import React, { useState, useMemo } from 'react';
 import { 
   Search, Filter, Plus, Edit2, Trash2, Package
 } from 'lucide-react';
+import Table from '../../components/common/Table';
 
 const MOCK_DATA = [
   { id: 'INV-001', itemName: 'Surgical Masks (Box of 50)', category: 'PPE', quantity: 450, location: 'Main Store', status: 'In Stock', isDeleted: false },
@@ -96,6 +97,49 @@ const Inventory = () => {
     }
   };
 
+  const columns = [
+    { header: 'Item ID', accessor: 'id' },
+    { 
+      header: 'Item Name', 
+      accessor: 'itemName',
+      render: (item) => (
+        <div className="flex items-center gap-3">
+          <div className="w-8 h-8 rounded-lg bg-primary-50 flex items-center justify-center text-primary-600">
+            <Package className="w-4 h-4" />
+          </div>
+          <span className="text-sm font-bold text-slate-900">{item.itemName}</span>
+        </div>
+      )
+    },
+    { header: 'Category', accessor: 'category' },
+    { header: 'Quantity', accessor: 'quantity' },
+    { header: 'Location', accessor: 'location' },
+    { 
+      header: 'Status', 
+      accessor: 'status',
+      render: (item) => (
+        <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium border ${getStatusBadge(item.status)}`}>
+          <div className={`w-1.5 h-1.5 rounded-full ${getStatusDot(item.status)}`}></div>
+          {item.status}
+        </span>
+      )
+    },
+    { 
+      header: 'Actions', 
+      accessor: 'actions',
+      render: (item) => (
+        <div className="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+          <button onClick={() => openEdit(item)} className="p-1.5 text-slate-400 hover:text-amber-600 hover:bg-amber-50 rounded-lg transition-colors" title="Edit">
+            <Edit2 className="w-4 h-4" />
+          </button>
+          <button onClick={() => handleSoftDelete(item.id)} className="p-1.5 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-colors" title="Delete">
+            <Trash2 className="w-4 h-4" />
+          </button>
+        </div>
+      )
+    }
+  ];
+
   return (
     <div className="animate-in fade-in zoom-in-95 duration-500 pb-10">
       
@@ -149,63 +193,8 @@ const Inventory = () => {
       </div>
 
       {/* DATA TABLE */}
-      <div className="bg-white rounded-b-xl border border-slate-100 shadow-sm overflow-hidden overflow-x-auto">
-        <table className="w-full text-left border-collapse">
-          <thead>
-            <tr className="bg-slate-50 border-b border-slate-100 text-xs uppercase tracking-wider text-slate-500 font-semibold">
-              <th className="px-6 py-4 cursor-pointer hover:bg-slate-100 transition-colors" onClick={() => handleSort('id')}>Item ID</th>
-              <th className="px-6 py-4 cursor-pointer hover:bg-slate-100 transition-colors" onClick={() => handleSort('itemName')}>Item Name</th>
-              <th className="px-6 py-4 cursor-pointer hover:bg-slate-100 transition-colors" onClick={() => handleSort('category')}>Category</th>
-              <th className="px-6 py-4 cursor-pointer hover:bg-slate-100 transition-colors" onClick={() => handleSort('quantity')}>Quantity</th>
-              <th className="px-6 py-4 cursor-pointer hover:bg-slate-100 transition-colors" onClick={() => handleSort('location')}>Location</th>
-              <th className="px-6 py-4 cursor-pointer hover:bg-slate-100 transition-colors" onClick={() => handleSort('status')}>Status</th>
-              <th className="px-6 py-4 text-right">Actions</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-slate-100">
-            {paginatedData.length > 0 ? paginatedData.map((item) => (
-              <tr key={item.id} className="hover:bg-slate-50/50 transition-colors group">
-                <td className="px-6 py-4 text-sm font-medium text-slate-900">{item.id}</td>
-                <td className="px-6 py-4">
-                  <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-lg bg-primary-50 flex items-center justify-center text-primary-600">
-                      <Package className="w-4 h-4" />
-                    </div>
-                    <span className="text-sm font-bold text-slate-900">{item.itemName}</span>
-                  </div>
-                </td>
-                <td className="px-6 py-4 text-sm text-slate-600">{item.category}</td>
-                <td className="px-6 py-4 text-sm text-slate-900 font-medium">{item.quantity}</td>
-                <td className="px-6 py-4 text-sm text-slate-600">{item.location}</td>
-                <td className="px-6 py-4">
-                  <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium border ${getStatusBadge(item.status)}`}>
-                    <div className={`w-1.5 h-1.5 rounded-full ${getStatusDot(item.status)}`}></div>
-                    {item.status}
-                  </span>
-                </td>
-                <td className="px-6 py-4 text-right">
-                  <div className="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                    <button onClick={() => openEdit(item)} className="p-1.5 text-slate-400 hover:text-amber-600 hover:bg-amber-50 rounded-lg transition-colors" title="Edit">
-                      <Edit2 className="w-4 h-4" />
-                    </button>
-                    <button onClick={() => handleSoftDelete(item.id)} className="p-1.5 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-colors" title="Delete">
-                      <Trash2 className="w-4 h-4" />
-                    </button>
-                  </div>
-                </td>
-              </tr>
-            )) : (
-              <tr>
-                <td colSpan="7" className="px-6 py-12 text-center text-slate-500">
-                  <p className="text-sm font-medium text-slate-900">No records found</p>
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
-      </div>
+      <Table columns={columns} data={paginatedData} />
 
-      {/* CREATE / EDIT MODAL */}
       {isFormOpen && (
         <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-in fade-in duration-200">
           <div className="bg-white rounded-2xl shadow-xl w-full max-w-md overflow-hidden animate-in zoom-in-95 duration-200">

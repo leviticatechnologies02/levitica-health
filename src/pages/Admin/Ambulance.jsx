@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { 
+import {
   Search, Filter, Plus, Edit2, Trash2, Ambulance as AmbulanceIcon
 } from 'lucide-react';
 
