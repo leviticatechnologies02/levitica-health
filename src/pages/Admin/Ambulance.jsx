@@ -19,7 +19,7 @@ const Ambulance = () => {
 
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [selectedRecord, setSelectedRecord] = useState(null);
-  
+
   const initialForm = { vehicleNo: '', driver: '', type: 'Basic Life Support', status: 'Available' };
   const [formData, setFormData] = useState(initialForm);
 
@@ -30,7 +30,7 @@ const Ambulance = () => {
   };
 
   const handleSoftDelete = (id) => {
-    if(window.confirm("Are you sure you want to delete this vehicle?")) {
+    if (window.confirm("Are you sure you want to delete this vehicle?")) {
       setData(data.map(item => item.id === id ? { ...item, isDeleted: true } : item));
     }
   };
@@ -61,7 +61,7 @@ const Ambulance = () => {
     return data
       .filter(item => !item.isDeleted)
       .filter(item => statusFilter === 'All' ? true : item.status === statusFilter)
-      .filter(item => 
+      .filter(item =>
         Object.values(item).some(val => String(val).toLowerCase().includes(search.toLowerCase()))
       )
       .sort((a, b) => {
@@ -98,7 +98,7 @@ const Ambulance = () => {
 
   return (
     <div className="animate-in fade-in zoom-in-95 duration-500 pb-10">
-      
+
       {/* DEV NOTE */}
       <div className="bg-indigo-50 border border-indigo-100 p-4 rounded-xl mb-6">
         <h3 className="text-indigo-800 font-semibold mb-1">Module Note: Ambulance Fleet</h3>
@@ -122,9 +122,9 @@ const Ambulance = () => {
       <div className="bg-white p-4 rounded-t-xl border border-slate-100 border-b-0 flex flex-col sm:flex-row justify-between items-center gap-4 shadow-sm">
         <div className="relative w-full sm:w-80">
           <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
-          <input 
-            type="text" 
-            placeholder="Search vehicles..." 
+          <input
+            type="text"
+            placeholder="Search vehicles..."
             className="w-full pl-9 pr-4 py-2 rounded-lg border border-slate-200 text-sm focus:outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500 transition-all"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
@@ -135,7 +135,7 @@ const Ambulance = () => {
             <Filter className="w-4 h-4" />
             <span className="font-medium">Status:</span>
           </div>
-          <select 
+          <select
             className="border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-primary-500 bg-slate-50"
             value={statusFilter}
             onChange={(e) => { setStatusFilter(e.target.value); setPage(1); }}
@@ -143,7 +143,7 @@ const Ambulance = () => {
             <option value="All">All</option>
             <option value="Available">Available</option>
             <option value="Dispatched">Dispatched</option>
-            <option value="Maintenance">Maintenance</option>
+            <option value="Maintenance">Maintenances</option>
           </select>
         </div>
       </div>
@@ -217,15 +217,15 @@ const Ambulance = () => {
               <div className="space-y-4">
                 <div>
                   <label className="block text-sm font-medium text-slate-700 mb-1">Vehicle Number</label>
-                  <input required type="text" className="w-full px-4 py-2 border border-slate-200 rounded-lg text-sm focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 outline-none" value={formData.vehicleNo} onChange={e => setFormData({...formData, vehicleNo: e.target.value})} />
+                  <input required type="text" className="w-full px-4 py-2 border border-slate-200 rounded-lg text-sm focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 outline-none" value={formData.vehicleNo} onChange={e => setFormData({ ...formData, vehicleNo: e.target.value })} />
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-slate-700 mb-1">Driver Name</label>
-                  <input required type="text" className="w-full px-4 py-2 border border-slate-200 rounded-lg text-sm focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 outline-none" value={formData.driver} onChange={e => setFormData({...formData, driver: e.target.value})} />
+                  <input required type="text" className="w-full px-4 py-2 border border-slate-200 rounded-lg text-sm focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 outline-none" value={formData.driver} onChange={e => setFormData({ ...formData, driver: e.target.value })} />
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-slate-700 mb-1">Type</label>
-                  <select className="w-full px-4 py-2 border border-slate-200 rounded-lg text-sm focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 outline-none" value={formData.type} onChange={e => setFormData({...formData, type: e.target.value})}>
+                  <select className="w-full px-4 py-2 border border-slate-200 rounded-lg text-sm focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 outline-none" value={formData.type} onChange={e => setFormData({ ...formData, type: e.target.value })}>
                     <option value="Advanced Life Support">Advanced Life Support</option>
                     <option value="Basic Life Support">Basic Life Support</option>
                     <option value="Patient Transport">Patient Transport</option>
@@ -233,7 +233,7 @@ const Ambulance = () => {
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-slate-700 mb-1">Status</label>
-                  <select className="w-full px-4 py-2 border border-slate-200 rounded-lg text-sm focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 outline-none" value={formData.status} onChange={e => setFormData({...formData, status: e.target.value})}>
+                  <select className="w-full px-4 py-2 border border-slate-200 rounded-lg text-sm focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 outline-none" value={formData.status} onChange={e => setFormData({ ...formData, status: e.target.value })}>
                     <option value="Available">Available</option>
                     <option value="Dispatched">Dispatched</option>
                     <option value="Maintenance">Maintenance</option>

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Outlet } from 'react-router-dom';
 import SuperadminSidebar from './layout/SuperadminSidebar';
 import AdminSidebar from './layout/AdminSidebar';
+import HospitalOwnerSidebar from './layout/HospitalOwnerSidebar';
 import Header from './layout/Header';
 
 
@@ -14,6 +15,12 @@ const MainLayout = ({ role = 'superadmin' }) => {
     <div className="flex min-h-screen bg-secondary-50">
       {role === 'admin' ? (
         <AdminSidebar 
+          isCollapsed={isSidebarCollapsed} 
+          isMobileOpen={isMobileOpen}
+          setIsMobileOpen={setIsMobileOpen}
+        />
+      ) : role === 'hospitalOwner' ? (
+        <HospitalOwnerSidebar
           isCollapsed={isSidebarCollapsed} 
           isMobileOpen={isMobileOpen}
           setIsMobileOpen={setIsMobileOpen}

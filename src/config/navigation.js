@@ -29,7 +29,22 @@ import {
   Package,
   Receipt,
   Ambulance,
-  BarChart2
+  BarChart2,
+  Building,
+  Map,
+  MapPin,
+  UserCheck,
+  List,
+  PlusSquare,
+  Shield,
+  Key,
+  FileText,
+  DollarSign,
+  ShieldCheck,
+  ListChecks,
+  Bell,
+  Link,
+  Palette
 } from 'lucide-react';
 
 export const SUPERADMIN_NAV = [
@@ -163,6 +178,103 @@ export const ADMIN_NAV = [
   {
     name: 'Profile',
     path: '/admin/profile',
+    icon: User,
+  }
+];
+
+export const HOSPITAL_OWNER_NAV = [
+  {
+    name: 'Dashboard',
+    path: '/hospital-owner',
+    icon: LayoutDashboard,
+  },
+  {
+    name: 'Organization',
+    icon: Building,
+    children: [
+      { name: 'Organization Profile', path: '/hospital-owner/organization/profile', icon: UserCog },
+      { name: 'Organization Settings', path: '/hospital-owner/organization/settings', icon: Settings },
+      { name: 'Branding', path: '/hospital-owner/organization/branding', icon: Palette },
+    ]
+  },
+  {
+    name: 'Regions',
+    icon: Map,
+    children: [
+      { name: 'Regions', path: '/hospital-owner/regions/list', icon: MapPin },
+      { name: 'Region Admins', path: '/hospital-owner/regions/admins', icon: UserCheck },
+    ]
+  },
+  {
+    name: 'Groups',
+    icon: Users,
+    children: [
+      { name: 'Groups', path: '/hospital-owner/groups/list', icon: Users },
+      { name: 'Group Admins', path: '/hospital-owner/groups/admins', icon: UserCheck },
+    ]
+  },
+  {
+    name: 'Hospitals',
+    icon: Building2,
+    children: [
+      { name: 'Hospital List', path: '/hospital-owner/hospitals/list', icon: List },
+      { name: 'Create Hospital', path: '/hospital-owner/hospitals/create', icon: PlusSquare },
+      { name: 'Branch Heads', path: '/hospital-owner/hospitals/branch-heads', icon: UserCheck },
+    ]
+  },
+  {
+    name: 'Users',
+    icon: UsersRound,
+    children: [
+      { name: 'Organization Users', path: '/hospital-owner/users/organization-users', icon: Users },
+      { name: 'Role Management', path: '/hospital-owner/users/role-management', icon: Shield },
+      { name: 'Permission Management', path: '/hospital-owner/users/permission-management', icon: Key },
+    ]
+  },
+  {
+    name: 'Subscription',
+    icon: CreditCard,
+    children: [
+      { name: 'Plans', path: '/hospital-owner/subscription/plans', icon: ClipboardList },
+      { name: 'Billing', path: '/hospital-owner/subscription/billing', icon: Receipt },
+      { name: 'Licenses', path: '/hospital-owner/subscription/licenses', icon: FileText },
+    ]
+  },
+  {
+    name: 'Reports',
+    icon: BarChart2,
+    children: [
+      { name: 'Organization Reports', path: '/hospital-owner/reports/organization', icon: BarChart2 },
+      { name: 'Hospital Reports', path: '/hospital-owner/reports/hospital', icon: BarChart2 },
+      { name: 'Revenue Reports', path: '/hospital-owner/reports/revenue', icon: DollarSign },
+    ]
+  },
+  {
+    name: 'Compliance',
+    icon: ShieldCheck,
+    children: [
+      { name: 'Licenses', path: '/hospital-owner/compliance/licenses', icon: FileText },
+      { name: 'Audit Logs', path: '/hospital-owner/compliance/audit-logs', icon: ListChecks },
+    ]
+  },
+  {
+    name: 'Notifications',
+    path: '/hospital-owner/notifications',
+    icon: Bell,
+  },
+  {
+    name: 'Integrations',
+    path: '/hospital-owner/integrations',
+    icon: Link,
+  },
+  {
+    name: 'Settings',
+    path: '/hospital-owner/settings',
+    icon: Settings,
+  },
+  {
+    name: 'Profile',
+    path: '/hospital-owner/profile',
     icon: User,
   }
 ];

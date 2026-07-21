@@ -28,7 +28,7 @@ const Settings = () => {
 
   return (
     <div className="animate-in fade-in zoom-in-95 duration-500 pb-10">
-      
+
       {/* DEV NOTE */}
       <div className="bg-indigo-50 border border-indigo-100 p-4 rounded-xl mb-6">
         <h3 className="text-indigo-800 font-semibold mb-1">Module Note: Hospital Settings</h3>
@@ -58,11 +58,10 @@ const Settings = () => {
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
-              className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all ${
-                activeTab === tab.id 
-                  ? 'bg-white text-primary-600 shadow-sm border border-slate-100' 
+              className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all ${activeTab === tab.id
+                  ? 'bg-white text-primary-600 shadow-sm border border-slate-100'
                   : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900 transparent'
-              }`}
+                }`}
             >
               <tab.icon className={`w-5 h-5 ${activeTab === tab.id ? 'text-primary-600' : 'text-slate-400'}`} />
               {tab.label}
@@ -121,7 +120,7 @@ const Settings = () => {
           {(activeTab === 'notifications' || activeTab === 'security' || activeTab === 'database') && (
             <div className="space-y-6 animate-in fade-in duration-300">
               <h2 className="text-lg font-bold text-slate-900 mb-6 capitalize">{activeTab} Preferences</h2>
-              
+
               <div className="space-y-4">
                 <label className="flex items-center justify-between p-4 border border-slate-100 rounded-xl hover:bg-slate-50 transition-colors cursor-pointer">
                   <div>
@@ -133,7 +132,7 @@ const Settings = () => {
                     <span className={`inline-block w-4 h-4 mt-1 ml-1 rounded-full bg-white transform transition ease-in-out duration-200 ${formData.emailNotifications ? 'translate-x-6' : 'translate-x-0'}`} />
                   </div>
                 </label>
-                
+
                 <label className="flex items-center justify-between p-4 border border-slate-100 rounded-xl hover:bg-slate-50 transition-colors cursor-pointer">
                   <div>
                     <h4 className="font-semibold text-slate-900">Two-Factor Authentication (2FA)</h4>

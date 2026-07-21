@@ -101,6 +101,13 @@ const Login = () => {
                 >
                   Sign In as Hospital Admin
                 </button>
+                <button
+                  type="button"
+                  onClick={() => navigate('/hospital-owner')}
+                  className="w-full bg-white border border-secondary-300 text-secondary-700 font-bold text-sm py-2.5 rounded-lg hover:bg-secondary-50 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300"
+                >
+                  Sign In as Hospital Owner
+                </button>
               </div>
             </form>
           </div>
