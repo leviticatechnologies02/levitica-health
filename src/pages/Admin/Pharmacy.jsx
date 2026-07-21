@@ -1,27 +1,55 @@
 import React, { useState, useMemo } from 'react';
-import { 
-  Search, Filter, Plus, Edit2, Trash2, Pill
+import {
+  Search, Filter, Plus, FileSpreadsheet, FileText,
+  MoreVertical, Edit2, Trash2, Eye, ShieldAlert,
+  ChevronLeft, ChevronRight, Activity, Pill, AlertTriangle, CheckCircle, XCircle
 } from 'lucide-react';
+import { Formik, Form, Field, ErrorMessage } from 'formik';
+import * as Yup from 'yup';
+import StatCard from '../../components/common/StatCard';
+import Table from '../../components/common/Table';
+import Modal from '../../components/common/Modal';
 
-const MOCK_DATA = [
-  { id: 'DRUG-001', name: 'Amoxicillin 500mg', category: 'Antibiotic', stock: 120, price: '$15.00', status: 'In Stock', isDeleted: false },
-  { id: 'DRUG-002', name: 'Ibuprofen 400mg', category: 'Painkiller', stock: 15, price: '$8.50', status: 'Low Stock', isDeleted: false },
-  { id: 'DRUG-003', name: 'Lisinopril 10mg', category: 'Blood Pressure', stock: 0, price: '$22.00', status: 'Out of Stock', isDeleted: false },
-];
+const MOCK_DATA = Array.from({ length: 45 }, (_, i) => {
+  const stock = Math.floor(Math.random() * 200);
+  let status = 'In Stock';
+  if (stock === 0) status = 'Out of Stock';
+  else if (stock < 20) status = 'Low Stock';
+  
+  return {
+    id: `DRUG-${1000 + i}`,
+    name: ['Amoxicillin 500mg', 'Ibuprofen 400mg', 'Lisinopril 10mg', 'Metformin 500mg', 'Atorvastatin 20mg', 'Omeprazole 20mg', 'Azithromycin 250mg', 'Amlodipine 5mg'][i % 8],
+    category: ['Antibiotic', 'Painkiller', 'Blood Pressure', 'Diabetes', 'Cholesterol', 'Antacid'][i % 6],
+    stock: stock,
+    price: `$${(Math.random() * 50 + 5).toFixed(2)}`,
+    status: status,
+    isDeleted: false,
+    createdBy: 'Admin User',
+    createdAt: new Date(Date.now() - Math.random() * 10000000000).toISOString().split('T')[0],
+  };
+});
+
+const DrugSchema = Yup.object().shape({
+  name: Yup.string().required('Drug Name is required'),
+  category: Yup.string().required('Category is required'),
+  stock: Yup.number().min(0, 'Stock cannot be negative').required('Stock Level is required'),
+  price: Yup.string().matches(/^\$\d+(\.\d{1,2})?$/, 'Must be a valid price, e.g., $15.00').required('Price is required'),
+  status: Yup.string().required('Status is required'),
+});
 
 const Pharmacy = () => {
   const [data, setData] = useState(MOCK_DATA);
   const [search, setSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState('All');
+
   const [page, setPage] = useState(1);
   const rowsPerPage = 10;
+
   const [sortConfig, setSortConfig] = useState({ key: 'name', direction: 'asc' });
 
   const [isFormOpen, setIsFormOpen] = useState(false);
+  const [isViewOpen, setIsViewOpen] = useState(false);
   const [selectedRecord, setSelectedRecord] = useState(null);
-  
-  const initialForm = { name: '', category: '', stock: 0, price: '', status: 'In Stock' };
-  const [formData, setFormData] = useState(initialForm);
 
   const handleSort = (key) => {
     let direction = 'asc';
@@ -30,39 +58,48 @@ const Pharmacy = () => {
   };
 
   const handleSoftDelete = (id) => {
-    if(window.confirm("Are you sure you want to delete this record?")) {
+    if (window.confirm("Are you sure you want to delete this record?")) {
       setData(data.map(item => item.id === id ? { ...item, isDeleted: true } : item));
     }
   };
 
+  const handleExport = (format) => {
+    alert(`Exporting data as ${format.toUpperCase()}... (Audit log recorded)`);
+  };
+
   const openCreate = () => {
-    setFormData(initialForm);
     setSelectedRecord(null);
     setIsFormOpen(true);
   };
 
   const openEdit = (record) => {
-    setFormData(record);
     setSelectedRecord(record);
     setIsFormOpen(true);
   };
 
-  const handleSave = (e) => {
-    e.preventDefault();
+  const openView = (record) => {
+    setSelectedRecord(record);
+    setIsViewOpen(true);
+  };
+
+  const handleSubmit = (values, { setSubmitting }) => {
     if (selectedRecord) {
-      setData(data.map(item => item.id === selectedRecord.id ? { ...formData, id: item.id, isDeleted: item.isDeleted } : item));
+      setData(data.map(item => item.id === selectedRecord.id ? { ...values, id: item.id } : item));
     } else {
-      setData([{ ...formData, id: `DRUG-00${Math.floor(Math.random() * 90) + 10}`, isDeleted: false }, ...data]);
+      setData([{ ...values, id: `DRUG-${Math.floor(Math.random() * 9000) + 1000}`, isDeleted: false, createdBy: 'Admin User', createdAt: new Date().toISOString().split('T')[0] }, ...data]);
     }
     setIsFormOpen(false);
+    setSubmitting(false);
   };
 
   const filteredData = useMemo(() => {
     return data
       .filter(item => !item.isDeleted)
       .filter(item => statusFilter === 'All' ? true : item.status === statusFilter)
-      .filter(item => 
-        Object.values(item).some(val => String(val).toLowerCase().includes(search.toLowerCase()))
+      .filter(item =>
+        item.name.toLowerCase().includes(search.toLowerCase()) ||
+        item.category.toLowerCase().includes(search.toLowerCase()) ||
+        item.id.toLowerCase().includes(search.toLowerCase())
       )
       .sort((a, b) => {
         if (a[sortConfig.key] < b[sortConfig.key]) return sortConfig.direction === 'asc' ? -1 : 1;
@@ -74,57 +111,116 @@ const Pharmacy = () => {
   const totalPages = Math.ceil(filteredData.length / rowsPerPage);
   const paginatedData = filteredData.slice((page - 1) * rowsPerPage, page * rowsPerPage);
 
-  const getStatusBadge = (status) => {
-    switch (status) {
-      case 'In Stock':
-        return 'bg-emerald-50 text-emerald-700 border-emerald-200';
-      case 'Low Stock':
-        return 'bg-amber-50 text-amber-700 border-amber-200';
-      case 'Out of Stock':
-        return 'bg-rose-50 text-rose-700 border-rose-200';
-      default:
-        return 'bg-slate-100 text-slate-600 border-slate-200';
-    }
-  };
+  const totalDrugs = data.filter(d => !d.isDeleted).length;
+  const inStock = data.filter(d => !d.isDeleted && d.status === 'In Stock').length;
+  const lowStock = data.filter(d => !d.isDeleted && d.status === 'Low Stock').length;
+  const outOfStock = data.filter(d => !d.isDeleted && d.status === 'Out of Stock').length;
 
-  const getStatusDot = (status) => {
-    switch (status) {
-      case 'In Stock': return 'bg-emerald-500';
-      case 'Low Stock': return 'bg-amber-500';
-      case 'Out of Stock': return 'bg-rose-500';
-      default: return 'bg-slate-400';
+  const columns = [
+    {
+      header: <div className="cursor-pointer hover:text-primary-600 transition-colors" onClick={() => handleSort('id')}>Drug ID</div>,
+      accessor: 'id',
+      render: (drug) => <span className="font-medium text-slate-900">{drug.id}</span>
+    },
+    {
+      header: <div className="cursor-pointer hover:text-primary-600 transition-colors" onClick={() => handleSort('name')}>Name & Category</div>,
+      accessor: 'name',
+      render: (drug) => (
+        <div className="flex flex-col">
+          <span className="text-sm font-medium text-slate-900">{drug.name}</span>
+          <span className="text-xs text-slate-500">{drug.category}</span>
+        </div>
+      )
+    },
+    {
+      header: <div className="cursor-pointer hover:text-primary-600 transition-colors" onClick={() => handleSort('stock')}>Stock</div>,
+      accessor: 'stock',
+      render: (drug) => (
+        <span className="font-medium text-slate-900">{drug.stock} units</span>
+      )
+    },
+    {
+      header: <div className="cursor-pointer hover:text-primary-600 transition-colors" onClick={() => handleSort('price')}>Price</div>,
+      accessor: 'price',
+      render: (drug) => <span className="text-sm text-slate-600">{drug.price}</span>
+    },
+    {
+      header: <div className="cursor-pointer hover:text-primary-600 transition-colors" onClick={() => handleSort('status')}>Status</div>,
+      accessor: 'status',
+      render: (drug) => {
+        let badgeColor = '';
+        let dotColor = '';
+        if (drug.status === 'In Stock') {
+          badgeColor = 'bg-emerald-50 text-emerald-700';
+          dotColor = 'bg-emerald-500';
+        } else if (drug.status === 'Low Stock') {
+          badgeColor = 'bg-amber-50 text-amber-700';
+          dotColor = 'bg-amber-500';
+        } else {
+          badgeColor = 'bg-rose-50 text-rose-700';
+          dotColor = 'bg-rose-500';
+        }
+        return (
+          <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium transition-colors ${badgeColor}`}>
+            <div className={`w-1.5 h-1.5 rounded-full ${dotColor}`}></div>
+            {drug.status}
+          </span>
+        );
+      }
+    },
+    {
+      header: 'Actions',
+      accessor: 'actions',
+      render: (drug) => (
+        <div className="flex items-center gap-2">
+          <button onClick={() => openView(drug)} className="p-1.5 text-slate-400 hover:text-primary-600 hover:bg-primary-50 rounded-lg transition-colors" title="View Details">
+            <Eye className="w-4 h-4" />
+          </button>
+          <button onClick={() => openEdit(drug)} className="p-1.5 text-slate-400 hover:text-amber-600 hover:bg-amber-50 rounded-lg transition-colors" title="Edit">
+            <Edit2 className="w-4 h-4" />
+          </button>
+          <button onClick={() => handleSoftDelete(drug.id)} className="p-1.5 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-colors" title="Delete">
+            <Trash2 className="w-4 h-4" />
+          </button>
+        </div>
+      )
     }
-  };
+  ];
 
   return (
     <div className="animate-in fade-in zoom-in-95 duration-500 pb-10">
-      
-      {/* DEV NOTE: To be removed later */}
-      <div className="bg-indigo-50 border border-indigo-100 p-4 rounded-xl mb-6">
-        <h3 className="text-indigo-800 font-semibold mb-1">Module Note: Pharmacy Module</h3>
-        <p className="text-indigo-600 text-sm"><strong>Flow/Usefulness:</strong> This module allows the hospital admin to track medication stock in real-time, prevent stockouts of critical drugs, and seamlessly integrate prescriptions from doctors directly to the pharmacy for faster patient service.</p>
-      </div>
 
-      {/* HEADER & ACTIONS */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-slate-900 tracking-tight">Pharmacy</h1>
+          <h1 className="text-2xl font-bold text-slate-900 tracking-tight">Pharmacy Management</h1>
           <p className="text-slate-500 text-sm mt-1">Manage medicines, stock levels, and drug categories.</p>
         </div>
-        <div className="flex items-center gap-2">
-          <button onClick={openCreate} className="flex items-center gap-2 px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors text-sm font-medium shadow-sm shadow-primary-600/20">
-            <Plus className="w-4 h-4" /> Add Drug
+        <div className="flex flex-wrap items-center gap-2 w-full sm:w-auto">
+          <button onClick={() => handleExport('excel')} className="flex-1 sm:flex-none flex justify-center items-center gap-2 px-3 py-2 bg-white border border-slate-200 text-slate-600 rounded-lg hover:bg-slate-50 transition-colors text-sm font-medium shadow-sm">
+            <FileSpreadsheet className="w-4 h-4 text-green-600" /> <span className="whitespace-nowrap">Export Excel</span>
+          </button>
+          <button onClick={() => handleExport('pdf')} className="flex-1 sm:flex-none flex justify-center items-center gap-2 px-3 py-2 bg-white border border-slate-200 text-slate-600 rounded-lg hover:bg-slate-50 transition-colors text-sm font-medium shadow-sm">
+            <FileText className="w-4 h-4 text-red-500" /> <span className="whitespace-nowrap">Export PDF</span>
+          </button>
+          <button onClick={openCreate} className="w-full sm:w-auto flex justify-center items-center gap-2 px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors text-sm font-medium shadow-sm shadow-primary-600/20">
+            <Plus className="w-4 h-4" /> <span className="whitespace-nowrap">Add Drug</span>
           </button>
         </div>
       </div>
 
-      {/* FILTERS & SEARCH */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+        <StatCard title="Total Drugs" value={totalDrugs} icon={Pill} colorTheme="blue" />
+        <StatCard title="In Stock" value={inStock} icon={CheckCircle} colorTheme="green" />
+        <StatCard title="Low Stock" value={lowStock} icon={AlertTriangle} colorTheme="amber" />
+        <StatCard title="Out of Stock" value={outOfStock} icon={XCircle} colorTheme="rose" />
+      </div>
+
       <div className="bg-white p-4 rounded-t-xl border border-slate-100 border-b-0 flex flex-col sm:flex-row justify-between items-center gap-4 shadow-sm">
         <div className="relative w-full sm:w-80">
           <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
-          <input 
-            type="text" 
-            placeholder="Search inventory..." 
+          <input
+            type="text"
+            placeholder="Search by ID, Name or Category..."
             className="w-full pl-9 pr-4 py-2 rounded-lg border border-slate-200 text-sm focus:outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500 transition-all"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
@@ -135,8 +231,8 @@ const Pharmacy = () => {
             <Filter className="w-4 h-4" />
             <span className="font-medium">Status:</span>
           </div>
-          <select 
-            className="border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-primary-500 bg-slate-50"
+          <select
+            className="border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-primary-500 bg-slate-50 w-full sm:w-auto"
             value={statusFilter}
             onChange={(e) => { setStatusFilter(e.target.value); setPage(1); }}
           >
@@ -148,112 +244,200 @@ const Pharmacy = () => {
         </div>
       </div>
 
-      {/* DATA TABLE */}
-      <div className="bg-white rounded-b-xl border border-slate-100 shadow-sm overflow-hidden overflow-x-auto">
-        <table className="w-full text-left border-collapse">
-          <thead>
-            <tr className="bg-slate-50 border-b border-slate-100 text-xs uppercase tracking-wider text-slate-500 font-semibold">
-              <th className="px-6 py-4 cursor-pointer hover:bg-slate-100 transition-colors" onClick={() => handleSort('id')}>Drug ID</th>
-              <th className="px-6 py-4 cursor-pointer hover:bg-slate-100 transition-colors" onClick={() => handleSort('name')}>Name</th>
-              <th className="px-6 py-4 cursor-pointer hover:bg-slate-100 transition-colors" onClick={() => handleSort('category')}>Category</th>
-              <th className="px-6 py-4 cursor-pointer hover:bg-slate-100 transition-colors" onClick={() => handleSort('stock')}>Stock</th>
-              <th className="px-6 py-4 cursor-pointer hover:bg-slate-100 transition-colors" onClick={() => handleSort('price')}>Price</th>
-              <th className="px-6 py-4 cursor-pointer hover:bg-slate-100 transition-colors" onClick={() => handleSort('status')}>Status</th>
-              <th className="px-6 py-4 text-right">Actions</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-slate-100">
-            {paginatedData.length > 0 ? paginatedData.map((item) => (
-              <tr key={item.id} className="hover:bg-slate-50/50 transition-colors group">
-                <td className="px-6 py-4 text-sm font-medium text-slate-900">{item.id}</td>
-                <td className="px-6 py-4">
-                  <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-lg bg-primary-50 flex items-center justify-center text-primary-600">
-                      <Pill className="w-4 h-4" />
-                    </div>
-                    <span className="text-sm font-bold text-slate-900">{item.name}</span>
-                  </div>
-                </td>
-                <td className="px-6 py-4 text-sm text-slate-600">{item.category}</td>
-                <td className="px-6 py-4 text-sm text-slate-900 font-medium">{item.stock} units</td>
-                <td className="px-6 py-4 text-sm text-slate-600">{item.price}</td>
-                <td className="px-6 py-4">
-                  <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium border ${getStatusBadge(item.status)}`}>
-                    <div className={`w-1.5 h-1.5 rounded-full ${getStatusDot(item.status)}`}></div>
-                    {item.status}
-                  </span>
-                </td>
-                <td className="px-6 py-4 text-right">
-                  <div className="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                    <button onClick={() => openEdit(item)} className="p-1.5 text-slate-400 hover:text-amber-600 hover:bg-amber-50 rounded-lg transition-colors" title="Edit">
-                      <Edit2 className="w-4 h-4" />
-                    </button>
-                    <button onClick={() => handleSoftDelete(item.id)} className="p-1.5 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-colors" title="Delete">
-                      <Trash2 className="w-4 h-4" />
-                    </button>
-                  </div>
-                </td>
-              </tr>
-            )) : (
-              <tr>
-                <td colSpan="7" className="px-6 py-12 text-center text-slate-500">
-                  <p className="text-sm font-medium text-slate-900">No records found</p>
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
+      <div className="bg-white rounded-b-xl border border-slate-100 border-t-0 shadow-sm overflow-hidden">
+        <Table columns={columns} data={paginatedData} className="border-0 shadow-none rounded-none" />
+
+        <div className="px-6 py-4 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-4 bg-slate-50/50">
+          <p className="text-sm text-slate-500 text-center sm:text-left">
+            Showing <span className="font-medium text-slate-900">{filteredData.length > 0 ? (page - 1) * rowsPerPage + 1 : 0}</span> to <span className="font-medium text-slate-900">{Math.min(page * rowsPerPage, filteredData.length)}</span> of <span className="font-medium text-slate-900">{filteredData.length}</span> results
+          </p>
+          <div className="flex items-center gap-1">
+            <button
+              onClick={() => setPage(p => Math.max(1, p - 1))}
+              disabled={page === 1}
+              className="p-1.5 rounded-lg border border-slate-200 text-slate-500 hover:bg-slate-100 disabled:opacity-50 disabled:cursor-not-allowed bg-white"
+            >
+              <ChevronLeft className="w-4 h-4" />
+            </button>
+            <div className="px-3 py-1.5 text-sm font-medium text-slate-700">
+              Page {page} of {totalPages || 1}
+            </div>
+            <button
+              onClick={() => setPage(p => Math.min(totalPages, p + 1))}
+              disabled={page === totalPages || totalPages === 0}
+              className="p-1.5 rounded-lg border border-slate-200 text-slate-500 hover:bg-slate-100 disabled:opacity-50 disabled:cursor-not-allowed bg-white"
+            >
+              <ChevronRight className="w-4 h-4" />
+            </button>
+          </div>
+        </div>
       </div>
 
-      {/* CREATE / EDIT MODAL */}
-      {isFormOpen && (
-        <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-in fade-in duration-200">
-          <div className="bg-white rounded-2xl shadow-xl w-full max-w-md overflow-hidden animate-in zoom-in-95 duration-200">
-            <div className="px-6 py-4 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
-              <h2 className="text-lg font-bold text-slate-900">{selectedRecord ? 'Edit Drug' : 'Add Drug'}</h2>
-              <button onClick={() => setIsFormOpen(false)} className="text-slate-400 hover:text-slate-600 transition-colors">
-                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
-              </button>
-            </div>
-            <form onSubmit={handleSave} className="p-6">
+      <Modal
+        isOpen={isFormOpen}
+        onClose={() => setIsFormOpen(false)}
+        title={selectedRecord ? 'Edit Drug' : 'Add New Drug'}
+      >
+        <Formik
+          initialValues={selectedRecord || { name: '', category: '', stock: 0, price: '$0.00', status: 'In Stock' }}
+          validationSchema={DrugSchema}
+          onSubmit={handleSubmit}
+        >
+          {({ isSubmitting, errors, touched, setFieldValue, values }) => {
+            
+            // Auto-update status based on stock level
+            React.useEffect(() => {
+              if (values.stock === 0) {
+                setFieldValue('status', 'Out of Stock');
+              } else if (values.stock > 0 && values.stock < 20) {
+                setFieldValue('status', 'Low Stock');
+              } else {
+                setFieldValue('status', 'In Stock');
+              }
+            }, [values.stock, setFieldValue]);
+
+            return (
+            <Form className="p-6">
               <div className="space-y-4">
                 <div>
                   <label className="block text-sm font-medium text-slate-700 mb-1">Drug Name</label>
-                  <input required type="text" className="w-full px-4 py-2 border border-slate-200 rounded-lg text-sm focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 outline-none" value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})} />
+                  <Field
+                    name="name"
+                    type="text"
+                    placeholder="e.g. Amoxicillin 500mg"
+                    className={`w-full px-4 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 outline-none ${errors.name && touched.name ? 'border-red-500' : 'border-slate-200'}`}
+                  />
+                  <ErrorMessage name="name" component="div" className="text-red-500 text-xs mt-1" />
                 </div>
+
                 <div>
                   <label className="block text-sm font-medium text-slate-700 mb-1">Category</label>
-                  <input required type="text" className="w-full px-4 py-2 border border-slate-200 rounded-lg text-sm focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 outline-none" value={formData.category} onChange={e => setFormData({...formData, category: e.target.value})} />
+                  <Field
+                    as="select"
+                    name="category"
+                    className={`w-full px-4 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 outline-none ${errors.category && touched.category ? 'border-red-500' : 'border-slate-200'}`}
+                  >
+                    <option value="">Select Category...</option>
+                    <option value="Antibiotic">Antibiotic</option>
+                    <option value="Painkiller">Painkiller</option>
+                    <option value="Blood Pressure">Blood Pressure</option>
+                    <option value="Diabetes">Diabetes</option>
+                    <option value="Cholesterol">Cholesterol</option>
+                    <option value="Antacid">Antacid</option>
+                  </Field>
+                  <ErrorMessage name="category" component="div" className="text-red-500 text-xs mt-1" />
                 </div>
+
                 <div className="grid grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-medium text-slate-700 mb-1">Stock Level</label>
-                    <input required type="number" className="w-full px-4 py-2 border border-slate-200 rounded-lg text-sm focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 outline-none" value={formData.stock} onChange={e => setFormData({...formData, stock: e.target.value})} />
+                    <Field
+                      name="stock"
+                      type="number"
+                      className={`w-full px-4 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 outline-none ${errors.stock && touched.stock ? 'border-red-500' : 'border-slate-200'}`}
+                    />
+                    <ErrorMessage name="stock" component="div" className="text-red-500 text-xs mt-1" />
                   </div>
+
                   <div>
                     <label className="block text-sm font-medium text-slate-700 mb-1">Price</label>
-                    <input required type="text" className="w-full px-4 py-2 border border-slate-200 rounded-lg text-sm focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 outline-none" value={formData.price} onChange={e => setFormData({...formData, price: e.target.value})} />
+                    <Field
+                      name="price"
+                      type="text"
+                      placeholder="$0.00"
+                      className={`w-full px-4 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 outline-none ${errors.price && touched.price ? 'border-red-500' : 'border-slate-200'}`}
+                    />
+                    <ErrorMessage name="price" component="div" className="text-red-500 text-xs mt-1" />
                   </div>
                 </div>
+                
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-1">Status</label>
-                  <select className="w-full px-4 py-2 border border-slate-200 rounded-lg text-sm focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 outline-none" value={formData.status} onChange={e => setFormData({...formData, status: e.target.value})}>
+                  <label className="block text-sm font-medium text-slate-700 mb-1">Status (Auto-calculated)</label>
+                  <Field
+                    as="select"
+                    name="status"
+                    disabled
+                    className={`w-full px-4 py-2 border rounded-lg text-sm bg-slate-50 text-slate-500 cursor-not-allowed outline-none ${errors.status && touched.status ? 'border-red-500' : 'border-slate-200'}`}
+                  >
                     <option value="In Stock">In Stock</option>
                     <option value="Low Stock">Low Stock</option>
                     <option value="Out of Stock">Out of Stock</option>
-                  </select>
+                  </Field>
+                  <ErrorMessage name="status" component="div" className="text-red-500 text-xs mt-1" />
                 </div>
               </div>
+
               <div className="mt-8 flex justify-end gap-3">
-                <button type="button" onClick={() => setIsFormOpen(false)} className="px-4 py-2 text-sm font-medium text-slate-600 bg-white border border-slate-200 rounded-lg hover:bg-slate-50 transition-colors">Cancel</button>
-                <button type="submit" className="px-4 py-2 text-sm font-medium text-white bg-primary-600 rounded-lg hover:bg-primary-700 shadow-sm shadow-primary-600/20 transition-colors">
-                  {selectedRecord ? 'Update' : 'Add Drug'}
+                <button
+                  type="button"
+                  onClick={() => setIsFormOpen(false)}
+                  className="px-4 py-2 text-sm font-medium text-slate-600 bg-white border border-slate-200 rounded-lg hover:bg-slate-50 transition-colors"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  disabled={isSubmitting}
+                  className="px-4 py-2 text-sm font-medium text-white bg-primary-600 rounded-lg hover:bg-primary-700 shadow-sm shadow-primary-600/20 transition-colors disabled:opacity-70"
+                >
+                  {isSubmitting ? 'Saving...' : (selectedRecord ? 'Update Drug' : 'Add Drug')}
                 </button>
               </div>
-            </form>
+            </Form>
+          )}}
+        </Formik>
+      </Modal>
+
+      <Modal
+        isOpen={isViewOpen}
+        onClose={() => setIsViewOpen(false)}
+        title="Drug Details"
+      >
+        {selectedRecord && (
+          <div>
+            <div className="p-6 space-y-4">
+              <div className="flex items-center gap-4 border-b border-slate-100 pb-4">
+                <div className="w-16 h-16 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 text-xl font-bold">
+                  <Pill className="w-8 h-8" />
+                </div>
+                <div>
+                  <h3 className="text-xl font-bold text-slate-900">{selectedRecord.name}</h3>
+                  <p className="text-sm text-blue-600 font-medium">{selectedRecord.category}</p>
+                </div>
+              </div>
+              <div className="grid grid-cols-2 gap-y-4 gap-x-2 text-sm">
+                <div>
+                  <p className="text-slate-500 mb-1">Drug ID</p>
+                  <p className="font-medium text-slate-900">{selectedRecord.id}</p>
+                </div>
+                <div>
+                  <p className="text-slate-500 mb-1">Status</p>
+                  <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${selectedRecord.status === 'In Stock' ? 'bg-emerald-50 text-emerald-700' : selectedRecord.status === 'Low Stock' ? 'bg-amber-50 text-amber-700' : 'bg-rose-50 text-rose-700'}`}>{selectedRecord.status}</span>
+                </div>
+                <div>
+                  <p className="text-slate-500 mb-1">Stock Level</p>
+                  <p className="font-medium text-slate-900">{selectedRecord.stock} units</p>
+                </div>
+                <div>
+                  <p className="text-slate-500 mb-1">Unit Price</p>
+                  <p className="font-medium text-slate-900">{selectedRecord.price}</p>
+                </div>
+                <div>
+                  <p className="text-slate-500 mb-1">Created At</p>
+                  <p className="font-medium text-slate-900">{selectedRecord.createdAt}</p>
+                </div>
+                <div>
+                  <p className="text-slate-500 mb-1">Added By</p>
+                  <p className="font-medium text-slate-900">{selectedRecord.createdBy}</p>
+                </div>
+              </div>
+            </div>
+            <div className="px-6 py-4 border-t border-slate-100 bg-slate-50 flex justify-end">
+              <button onClick={() => setIsViewOpen(false)} className="px-4 py-2 text-sm font-medium text-slate-700 bg-white border border-slate-200 rounded-lg hover:bg-slate-50 transition-colors">Close</button>
+            </div>
           </div>
-        </div>
-      )}
+        )}
+      </Modal>
 
     </div>
   );

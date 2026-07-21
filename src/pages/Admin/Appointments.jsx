@@ -8,13 +8,9 @@ const MOCK_DATA = [
   { id: 'APT-001', patient: 'John Doe', doctor: 'Dr. Smith A.', date: '2023-10-15', time: '09:00 AM', type: 'Consultation', status: 'Scheduled', isDeleted: false },
   { id: 'APT-002', patient: 'Jane Smith', doctor: 'Dr. Johnson B.', date: '2023-10-15', time: '10:30 AM', type: 'Follow-up', status: 'Completed', isDeleted: false },
   { id: 'APT-003', patient: 'Michael Johnson', doctor: 'Dr. Williams C.', date: '2023-10-16', time: '02:00 PM', type: 'Checkup', status: 'Cancelled', isDeleted: false },
-  { id: 'APT-004', patient: 'Michael Johnson', doctor: 'Dr. Williams C.', date: '2023-10-16', time: '02:00 PM', type: 'Checkup', status: 'Cancelled', isDeleted: false },
-  { id: 'APT-005', patient: 'Michael Johnson', doctor: 'Dr. Williams C.', date: '2023-10-16', time: '02:00 PM', type: 'Checkup', status: 'Cancelled', isDeleted: false },
-  { id: 'APT-006', patient: 'Michael Johnson', doctor: 'Dr. Williams C.', date: '2023-10-16', time: '02:00 PM', type: 'Checkup', status: 'Cancelled', isDeleted: false },
-  { id: 'APT-007', patient: 'Michael Johnson', doctor: 'Dr. Williams C.', date: '2023-10-16', time: '02:00 PM', type: 'Checkup', status: 'Cancelled', isDeleted: false },
-  { id: 'APT-008', patient: 'Michael Johnson', doctor: 'Dr. Williams C.', date: '2023-10-16', time: '02:00 PM', type: 'Checkup', status: 'Cancelled', isDeleted: false },
-  { id: 'APT-009', patient: 'Michael Johnson', doctor: 'Dr. Williams C.', date: '2023-10-16', time: '02:00 PM', type: 'Checkup', status: 'Cancelled', isDeleted: false },
-  { id: 'APT-010', patient: 'Michael Johnson', doctor: 'Dr. Williams C.', date: '2023-10-16', time: '02:00 PM', type: 'Checkup', status: 'Cancelled', isDeleted: false },
+  { id: 'APT-004', patient: 'Emily Davis', doctor: 'Dr. Brown D.', date: '2023-10-17', time: '11:00 AM', type: 'Surgery', status: 'Scheduled', isDeleted: false },
+  { id: 'APT-005', patient: 'David Wilson', doctor: 'Dr. Jones A.', date: '2023-10-18', time: '03:30 PM', type: 'Consultation', status: 'Scheduled', isDeleted: false },
+  { id: 'APT-006', patient: 'Olivia Martinez', doctor: 'Dr. Garcia B.', date: '2023-10-19', time: '09:00 AM', type: 'Follow-up', status: 'Completed', isDeleted: false },
 ];
 
 const Appointments = () => {

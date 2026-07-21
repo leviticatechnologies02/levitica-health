@@ -2,33 +2,33 @@ import React from "react";
 import { Routes, Route } from "react-router-dom";
 import MainLayout from "../components/MainLayout";
 
-import AdminDashboard from "../pages/admin/Dashboard";
-import AdminPatients from "../pages/admin/Patients";
-import AdminAppointments from "../pages/admin/Appointments";
-import AdminPharmacy from "../pages/admin/Pharmacy";
-import AdminLaboratory from "../pages/admin/Laboratory";
-import AdminRadiology from "../pages/admin/Radiology";
-import AdminInventory from "../pages/admin/Inventory";
-import AdminBilling from "../pages/admin/Billing";
-import AdminAmbulance from "../pages/admin/Ambulance";
-import AdminAnnouncements from "../pages/admin/Announcements";
-import AdminReports from "../pages/admin/Reports";
-import AdminSettings from "../pages/admin/Settings";
-import AdminProfile from "../pages/admin/AdminProfile";
+import AdminDashboard from "../pages/Admin/Dashboard";
+import AdminPatients from "../pages/Admin/Patients";
+import AdminAppointments from "../pages/Admin/Appointments";
+import AdminPharmacy from "../pages/Admin/Pharmacy";
+import AdminLaboratory from "../pages/Admin/Laboratory";
+import AdminRadiology from "../pages/Admin/Radiology";
+import AdminInventory from "../pages/Admin/Inventory";
+import AdminBilling from "../pages/Admin/Billing";
+import AdminAmbulance from "../pages/Admin/Ambulance";
+import AdminAnnouncements from "../pages/Admin/Announcements";
+import AdminReports from "../pages/Admin/Reports";
+import AdminSettings from "../pages/Admin/Settings";
+import AdminProfile from "../pages/Admin/AdminProfile";
 
-import AdminHospitalProfile from "../pages/admin/hospital/Profile";
-import AdminHospitalDepartments from "../pages/admin/hospital/Departments";
-import AdminHospitalBlocks from "../pages/admin/hospital/Blocks";
-import AdminHospitalFloors from "../pages/admin/hospital/Floors";
-import AdminHospitalWards from "../pages/admin/hospital/Wards";
-import AdminHospitalRooms from "../pages/admin/hospital/Rooms";
-import AdminHospitalBeds from "../pages/admin/hospital/Beds";
+import AdminHospitalProfile from "../pages/Admin/hospital/Profile";
+import AdminHospitalDepartments from "../pages/Admin/hospital/Departments";
+import AdminHospitalBlocks from "../pages/Admin/hospital/Blocks";
+import AdminHospitalFloors from "../pages/Admin/hospital/Floors";
+import AdminHospitalWards from "../pages/Admin/hospital/Wards";
+import AdminHospitalRooms from "../pages/Admin/hospital/Rooms";
+import AdminHospitalBeds from "../pages/Admin/hospital/Beds";
 
-import AdminStaffDoctors from "../pages/admin/staff/Doctors";
-import AdminStaffNurses from "../pages/admin/staff/Nurses";
-import AdminStaffReceptionists from "../pages/admin/staff/Receptionists";
-import AdminStaffPharmacists from "../pages/admin/staff/Pharmacists";
-import AdminStaffEmployees from "../pages/admin/staff/Employees";
+import AdminStaffDoctors from "../pages/Admin/staff/Doctors";
+import AdminStaffNurses from "../pages/Admin/staff/Nurses";
+import AdminStaffReceptionists from "../pages/Admin/staff/Receptionists";
+import AdminStaffPharmacists from "../pages/Admin/staff/Pharmacists";
+import AdminStaffEmployees from "../pages/Admin/staff/Employees";
 
 const AdminRoutes = () => {
     return (

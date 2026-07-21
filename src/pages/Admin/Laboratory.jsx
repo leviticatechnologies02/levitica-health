@@ -44,9 +44,9 @@ const Laboratory = () => {
 
   // Stats
   const stats = [
-    { title: 'Total Orders', value: '24', icon: ClipboardList, colorTheme: 'blue', trend: '+12%', trendLabel: 'vs yesterday' },
-    { title: 'Pending Results', value: '8', icon: Clock, colorTheme: 'orange', trend: '-2', trendLabel: 'vs yesterday' },
-    { title: 'Critical Alerts', value: '2', icon: AlertCircle, colorTheme: 'rose', trend: '+1', trendLabel: 'vs yesterday' },
+    { title: 'Total Orders', value: '24', icon: ClipboardList, colorTheme: 'blue', trendLabel: 'vs yesterday' },
+    { title: 'Pending Results', value: '8', icon: Clock, colorTheme: 'orange', trendLabel: 'vs yesterday' },
+    { title: 'Critical Alerts', value: '2', icon: AlertCircle, colorTheme: 'rose', trendLabel: 'vs yesterday' },
     { title: 'Catalog Tests', value: catalogData.length.toString(), icon: FlaskConical, colorTheme: 'green' },
   ];
 

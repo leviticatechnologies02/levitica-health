@@ -1,12 +1,25 @@
 import React, { useState, useMemo } from 'react';
 import { 
-  Search, Filter, Plus, Edit2, Trash2, DoorClosed
+  Search, Filter, Plus, Edit2, Trash2, DoorClosed,
+  ChevronLeft, ChevronRight
 } from 'lucide-react';
+import { Formik, Form, Field, ErrorMessage } from 'formik';
+import * as Yup from 'yup';
+import Table from '../../../components/common/Table';
+import Modal from '../../../components/common/Modal';
 
 const MOCK_DATA = [
   { id: 'RM-101', number: '101', type: 'Private', ward: 'General Ward A', price: '$200/day', status: 'Available', isDeleted: false, createdAt: '2023-01-15' },
   { id: 'RM-102', number: '102', type: 'Semi-Private', ward: 'General Ward A', price: '$100/day', status: 'Occupied', isDeleted: false, createdAt: '2023-02-20' },
 ];
+
+const RoomSchema = Yup.object().shape({
+  number: Yup.string().required('Room Number is required'),
+  type: Yup.string().required('Room Type is required'),
+  ward: Yup.string().required('Ward is required'),
+  price: Yup.string().required('Price is required'),
+  status: Yup.string().required('Status is required'),
+});
 
 const Rooms = () => {
   const [data, setData] = useState(MOCK_DATA);
@@ -18,9 +31,6 @@ const Rooms = () => {
 
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [selectedRecord, setSelectedRecord] = useState(null);
-  
-  const initialForm = { number: '', type: '', ward: '', price: '', status: 'Available' };
-  const [formData, setFormData] = useState(initialForm);
 
   const handleSort = (key) => {
     let direction = 'asc';
@@ -45,25 +55,23 @@ const Rooms = () => {
   };
 
   const openCreate = () => {
-    setFormData(initialForm);
     setSelectedRecord(null);
     setIsFormOpen(true);
   };
 
   const openEdit = (record) => {
-    setFormData(record);
     setSelectedRecord(record);
     setIsFormOpen(true);
   };
 
-  const handleSave = (e) => {
-    e.preventDefault();
+  const handleSubmit = (values, { setSubmitting }) => {
     if (selectedRecord) {
-      setData(data.map(item => item.id === selectedRecord.id ? { ...formData, id: item.id, isDeleted: item.isDeleted, createdAt: item.createdAt } : item));
+      setData(data.map(item => item.id === selectedRecord.id ? { ...values, id: item.id, isDeleted: item.isDeleted, createdAt: item.createdAt } : item));
     } else {
-      setData([{ ...formData, id: `RM-${Math.floor(Math.random() * 900) + 100}`, isDeleted: false, createdAt: new Date().toISOString().split('T')[0] }, ...data]);
+      setData([{ ...values, id: `RM-${Math.floor(Math.random() * 900) + 100}`, isDeleted: false, createdAt: new Date().toISOString().split('T')[0] }, ...data]);
     }
     setIsFormOpen(false);
+    setSubmitting(false);
   };
 
   const filteredData = useMemo(() => {
@@ -83,15 +91,73 @@ const Rooms = () => {
   const totalPages = Math.ceil(filteredData.length / rowsPerPage);
   const paginatedData = filteredData.slice((page - 1) * rowsPerPage, page * rowsPerPage);
 
+  const columns = [
+    {
+      header: <div className="cursor-pointer hover:text-primary-600 transition-colors" onClick={() => handleSort('id')}>ID</div>,
+      accessor: 'id',
+      render: (item) => <span className="font-medium text-slate-900">{item.id}</span>
+    },
+    {
+      header: <div className="cursor-pointer hover:text-primary-600 transition-colors" onClick={() => handleSort('number')}>Room Number</div>,
+      accessor: 'number',
+      render: (item) => (
+        <div className="flex items-center gap-3">
+          <div className="w-8 h-8 rounded-lg bg-primary-50 flex items-center justify-center text-primary-600">
+            <DoorClosed className="w-4 h-4" />
+          </div>
+          <span className="text-sm font-bold text-slate-900">{item.number}</span>
+        </div>
+      )
+    },
+    {
+      header: <div className="cursor-pointer hover:text-primary-600 transition-colors" onClick={() => handleSort('type')}>Type</div>,
+      accessor: 'type',
+      render: (item) => <span className="text-sm text-slate-600">{item.type}</span>
+    },
+    {
+      header: <div className="cursor-pointer hover:text-primary-600 transition-colors" onClick={() => handleSort('ward')}>Ward</div>,
+      accessor: 'ward',
+      render: (item) => <span className="text-sm text-slate-600">{item.ward}</span>
+    },
+    {
+      header: <div className="cursor-pointer hover:text-primary-600 transition-colors" onClick={() => handleSort('price')}>Price</div>,
+      accessor: 'price',
+      render: (item) => <span className="text-sm text-slate-600">{item.price}</span>
+    },
+    {
+      header: <div className="cursor-pointer hover:text-primary-600 transition-colors" onClick={() => handleSort('status')}>Status</div>,
+      accessor: 'status',
+      render: (item) => (
+        <button 
+          onClick={() => handleToggleStatus(item.id)}
+          className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium transition-colors ${
+            item.status === 'Active' || item.status === 'Available' ? 'bg-emerald-50 text-emerald-700 hover:bg-emerald-100' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+          }`}
+        >
+          <div className={`w-1.5 h-1.5 rounded-full ${item.status === 'Active' || item.status === 'Available' ? 'bg-emerald-500' : 'bg-slate-400'}`}></div>
+          {item.status}
+        </button>
+      )
+    },
+    {
+      header: <div className="text-right">Actions</div>,
+      accessor: 'actions',
+      render: (item) => (
+        <div className="flex items-center justify-end gap-2 group-hover:opacity-100 transition-opacity">
+          <button onClick={() => openEdit(item)} className="p-1.5 text-slate-400 hover:text-amber-600 hover:bg-amber-50 rounded-lg transition-colors" title="Edit">
+            <Edit2 className="w-4 h-4" />
+          </button>
+          <button onClick={() => handleSoftDelete(item.id)} className="p-1.5 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-colors" title="Delete">
+            <Trash2 className="w-4 h-4" />
+          </button>
+        </div>
+      )
+    }
+  ];
+
   return (
     <div className="animate-in fade-in zoom-in-95 duration-500 pb-10">
       
-      {/* DEV NOTE: To be removed later */}
-      <div className="bg-indigo-50 border border-indigo-100 p-4 rounded-xl mb-6">
-        <h3 className="text-indigo-800 font-semibold mb-1">Module Note: Manage room allocations, types, and pricing configurations.</h3>
-        <p className="text-indigo-600 text-sm"><strong>Flow/Usefulness:</strong> Tracking rooms individually allows the hospital to manage different room types (e.g., Private, Semi-Private, General) and auto-calculate room tariffs during the billing process, ensuring accurate patient charging.</p>
-      </div>
-
       {/* HEADER & ACTIONS */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
         <div>
@@ -136,112 +202,111 @@ const Rooms = () => {
 
       {/* DATA TABLE */}
       <div className="bg-white rounded-b-xl border border-slate-100 shadow-sm overflow-hidden overflow-x-auto">
-        <table className="w-full text-left border-collapse">
-          <thead>
-            <tr className="bg-slate-50 border-b border-slate-100 text-xs uppercase tracking-wider text-slate-500 font-semibold">
-              <th className="px-6 py-4 cursor-pointer hover:bg-slate-100 transition-colors" onClick={() => handleSort('id')}>ID</th>
-              <th className="px-6 py-4 cursor-pointer hover:bg-slate-100 transition-colors" onClick={() => handleSort('number')}>Room Number</th>
-              <th className="px-6 py-4 cursor-pointer hover:bg-slate-100 transition-colors" onClick={() => handleSort('type')}>Type</th>
-              <th className="px-6 py-4 cursor-pointer hover:bg-slate-100 transition-colors" onClick={() => handleSort('ward')}>Ward</th>
-              <th className="px-6 py-4 cursor-pointer hover:bg-slate-100 transition-colors" onClick={() => handleSort('price')}>Price</th>
-              <th className="px-6 py-4 cursor-pointer hover:bg-slate-100 transition-colors" onClick={() => handleSort('status')}>Status</th>
-              <th className="px-6 py-4 text-right">Actions</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-slate-100">
-            {paginatedData.length > 0 ? paginatedData.map((item) => (
-              <tr key={item.id} className="hover:bg-slate-50/50 transition-colors group">
-                <td className="px-6 py-4 text-sm font-medium text-slate-900">{item.id}</td>
-                <td className="px-6 py-4">
-                  <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-lg bg-primary-50 flex items-center justify-center text-primary-600">
-                      <DoorClosed className="w-4 h-4" />
-                    </div>
-                    <span className="text-sm font-bold text-slate-900">{item.number}</span>
-                  </div>
-                </td>
-                <td className="px-6 py-4 text-sm text-slate-600">{item.type}</td>
-                <td className="px-6 py-4 text-sm text-slate-600">{item.ward}</td>
-                <td className="px-6 py-4 text-sm text-slate-600">{item.price}</td>
-                <td className="px-6 py-4">
-                  <button 
-                    onClick={() => handleToggleStatus(item.id)}
-                    className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium transition-colors ${
-                      item.status === 'Active' || item.status === 'Available' ? 'bg-emerald-50 text-emerald-700 hover:bg-emerald-100' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
-                    }`}
-                  >
-                    <div className={`w-1.5 h-1.5 rounded-full ${item.status === 'Active' || item.status === 'Available' ? 'bg-emerald-500' : 'bg-slate-400'}`}></div>
-                    {item.status}
-                  </button>
-                </td>
-                <td className="px-6 py-4 text-right">
-                  <div className="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                    <button onClick={() => openEdit(item)} className="p-1.5 text-slate-400 hover:text-amber-600 hover:bg-amber-50 rounded-lg transition-colors" title="Edit">
-                      <Edit2 className="w-4 h-4" />
-                    </button>
-                    <button onClick={() => handleSoftDelete(item.id)} className="p-1.5 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-colors" title="Delete">
-                      <Trash2 className="w-4 h-4" />
-                    </button>
-                  </div>
-                </td>
-              </tr>
-            )) : (
-              <tr>
-                <td colSpan="7" className="px-6 py-12 text-center text-slate-500">
-                  <p className="text-sm font-medium text-slate-900">No records found</p>
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
+        <Table columns={columns} data={paginatedData} className="border-0 shadow-none rounded-none" />
+
+        <div className="px-6 py-4 border-t border-slate-100 flex items-center justify-between bg-slate-50/50">
+          <p className="text-sm text-slate-500">
+            Showing <span className="font-medium text-slate-900">{filteredData.length > 0 ? (page - 1) * rowsPerPage + 1 : 0}</span> to <span className="font-medium text-slate-900">{Math.min(page * rowsPerPage, filteredData.length)}</span> of <span className="font-medium text-slate-900">{filteredData.length}</span> results
+          </p>
+          <div className="flex items-center gap-1">
+            <button
+              onClick={() => setPage(p => Math.max(1, p - 1))}
+              disabled={page === 1}
+              className="p-1.5 rounded-lg border border-slate-200 text-slate-500 hover:bg-slate-100 disabled:opacity-50 disabled:cursor-not-allowed bg-white"
+            >
+              <ChevronLeft className="w-4 h-4" />
+            </button>
+            <div className="px-3 py-1.5 text-sm font-medium text-slate-700">
+              Page {page} of {totalPages || 1}
+            </div>
+            <button
+              onClick={() => setPage(p => Math.min(totalPages, p + 1))}
+              disabled={page === totalPages || totalPages === 0}
+              className="p-1.5 rounded-lg border border-slate-200 text-slate-500 hover:bg-slate-100 disabled:opacity-50 disabled:cursor-not-allowed bg-white"
+            >
+              <ChevronRight className="w-4 h-4" />
+            </button>
+          </div>
+        </div>
       </div>
 
       {/* CREATE / EDIT MODAL */}
-      {isFormOpen && (
-        <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-in fade-in duration-200">
-          <div className="bg-white rounded-2xl shadow-xl w-full max-w-md overflow-hidden animate-in zoom-in-95 duration-200">
-            <div className="px-6 py-4 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
-              <h2 className="text-lg font-bold text-slate-900">{selectedRecord ? 'Edit Record' : 'Create Record'}</h2>
-              <button onClick={() => setIsFormOpen(false)} className="text-slate-400 hover:text-slate-600 transition-colors">
-                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
-              </button>
-            </div>
-            <form onSubmit={handleSave} className="p-6">
+      <Modal
+        isOpen={isFormOpen}
+        onClose={() => setIsFormOpen(false)}
+        title={selectedRecord ? 'Edit Record' : 'Create Record'}
+      >
+        <Formik
+          initialValues={selectedRecord || { number: '', type: '', ward: '', price: '', status: 'Available' }}
+          validationSchema={RoomSchema}
+          onSubmit={handleSubmit}
+        >
+          {({ isSubmitting, errors, touched }) => (
+            <Form className="p-6">
               <div className="space-y-4">
                 <div>
                   <label className="block text-sm font-medium text-slate-700 mb-1">Room Number</label>
-                  <input required type="text" className="w-full px-4 py-2 border border-slate-200 rounded-lg text-sm focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 outline-none" value={formData.number} onChange={e => setFormData({...formData, number: e.target.value})} />
+                  <Field
+                    name="number"
+                    type="text"
+                    placeholder="e.g. 101"
+                    className={`w-full px-4 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 outline-none ${errors.number && touched.number ? 'border-red-500' : 'border-slate-200'}`}
+                  />
+                  <ErrorMessage name="number" component="div" className="text-red-500 text-xs mt-1" />
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-slate-700 mb-1">Room Type</label>
-                  <input required type="text" className="w-full px-4 py-2 border border-slate-200 rounded-lg text-sm focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 outline-none" value={formData.type} onChange={e => setFormData({...formData, type: e.target.value})} />
+                  <Field
+                    name="type"
+                    type="text"
+                    placeholder="e.g. Private"
+                    className={`w-full px-4 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 outline-none ${errors.type && touched.type ? 'border-red-500' : 'border-slate-200'}`}
+                  />
+                  <ErrorMessage name="type" component="div" className="text-red-500 text-xs mt-1" />
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-slate-700 mb-1">Ward</label>
-                  <input required type="text" className="w-full px-4 py-2 border border-slate-200 rounded-lg text-sm focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 outline-none" value={formData.ward} onChange={e => setFormData({...formData, ward: e.target.value})} />
+                  <Field
+                    name="ward"
+                    type="text"
+                    placeholder="e.g. General Ward A"
+                    className={`w-full px-4 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 outline-none ${errors.ward && touched.ward ? 'border-red-500' : 'border-slate-200'}`}
+                  />
+                  <ErrorMessage name="ward" component="div" className="text-red-500 text-xs mt-1" />
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-slate-700 mb-1">Price</label>
-                  <input required type="text" className="w-full px-4 py-2 border border-slate-200 rounded-lg text-sm focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 outline-none" value={formData.price} onChange={e => setFormData({...formData, price: e.target.value})} />
+                  <Field
+                    name="price"
+                    type="text"
+                    placeholder="e.g. $200/day"
+                    className={`w-full px-4 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 outline-none ${errors.price && touched.price ? 'border-red-500' : 'border-slate-200'}`}
+                  />
+                  <ErrorMessage name="price" component="div" className="text-red-500 text-xs mt-1" />
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-slate-700 mb-1">Status</label>
-                  <select className="w-full px-4 py-2 border border-slate-200 rounded-lg text-sm focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 outline-none" value={formData.status} onChange={e => setFormData({...formData, status: e.target.value})}>
+                  <Field
+                    as="select"
+                    name="status"
+                    className={`w-full px-4 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 outline-none ${errors.status && touched.status ? 'border-red-500' : 'border-slate-200'}`}
+                  >
                     <option value="Available">Available</option>
                     <option value="Occupied">Occupied</option>
-                  </select>
+                  </Field>
+                  <ErrorMessage name="status" component="div" className="text-red-500 text-xs mt-1" />
                 </div>
               </div>
               <div className="mt-8 flex justify-end gap-3">
                 <button type="button" onClick={() => setIsFormOpen(false)} className="px-4 py-2 text-sm font-medium text-slate-600 bg-white border border-slate-200 rounded-lg hover:bg-slate-50 transition-colors">Cancel</button>
-                <button type="submit" className="px-4 py-2 text-sm font-medium text-white bg-primary-600 rounded-lg hover:bg-primary-700 shadow-sm shadow-primary-600/20 transition-colors">
-                  {selectedRecord ? 'Update' : 'Create'}
+                <button type="submit" disabled={isSubmitting} className="px-4 py-2 text-sm font-medium text-white bg-primary-600 rounded-lg hover:bg-primary-700 shadow-sm shadow-primary-600/20 transition-colors disabled:opacity-70">
+                  {isSubmitting ? 'Saving...' : (selectedRecord ? 'Update' : 'Create')}
                 </button>
               </div>
-            </form>
-          </div>
-        </div>
-      )}
+            </Form>
+          )}
+        </Formik>
+      </Modal>
 
     </div>
   );
