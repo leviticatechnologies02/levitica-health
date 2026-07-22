@@ -8,6 +8,7 @@ import HospitalOwnerRoutes from "./HospitalOwnerRoutes";
 import RegionAdminRoutes from "./RegionAdminRoutes";
 import GroupAdminRoutes from "./GroupAdminRoutes";
 import ReceptionistRoutes from "./ReceptionistRoutes";
+import NurseRoutes from "./NurseRoutes";
 
 const Approutes = () => {
     return (
@@ -21,6 +22,7 @@ const Approutes = () => {
             <Route path="/regionAdmin/*" element={<RegionAdminRoutes />} />
             <Route path="/groupAdmin/*" element={<GroupAdminRoutes />} />
             <Route path="/receptionist/*" element={<ReceptionistRoutes />} />
+            <Route path="/nurse/*" element={<NurseRoutes />} />
         </Routes>
     );
 };

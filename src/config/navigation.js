@@ -386,3 +386,36 @@ export const RECEPTIONIST_NAV = [
     icon: User,
   }
 ];
+
+export const NURSE_NAV = [
+  {
+    name: "Dashboard",
+    path: "/nurse",
+    icon: LayoutDashboard,
+  },
+  {
+    name: "Inpatients",
+    path: "/nurse/inpatients",
+    icon: Bed,
+  },
+  {
+    name: "Vitals",
+    path: "/nurse/vitals",
+    icon: Activity,
+  },
+  {
+    name: "Medications",
+    path: "/nurse/medications",
+    icon: Pill,
+  },
+  {
+    name: "Bed Management",
+    path: "/nurse/bed-management",
+    icon: BedDouble,
+  },
+  {
+    name: "My Profile",
+    path: "/nurse/profile",
+    icon: User,
+  }
+];

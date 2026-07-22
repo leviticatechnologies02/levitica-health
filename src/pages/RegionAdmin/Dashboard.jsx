@@ -14,6 +14,11 @@ const DASHBOARD_DATA = [
   { name: 'May', patients: 1890, revenue: 4800 },
   { name: 'Jun', patients: 2390, revenue: 3800 },
   { name: 'Jul', patients: 3490, revenue: 4300 },
+  { name: 'Aug', patients: 2000, revenue: 9800 },
+  { name: 'Sep', patients: 2780, revenue: 3908 },
+  { name: 'Oct', patients: 1890, revenue: 4800 },
+  { name: 'Nov', patients: 2390, revenue: 3800 },
+  { name: 'Dec', patients: 3490, revenue: 4300 },
 ];
 
 const RECENT_ACTIVITY = [
