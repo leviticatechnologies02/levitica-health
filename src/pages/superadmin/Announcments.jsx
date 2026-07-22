@@ -36,7 +36,7 @@ const AnnouncementFormModal = ({ initialData, onSubmit, onCancel }) => {
       title={isEditing ? 'Edit Announcement' : 'New Announcement'}
       maxWidth="max-w-2xl"
     >
-      <form onSubmit={formik.handleSubmit} className="p-6 space-y-6">
+      <form onSubmit={formik.handleSubmit} className="space-y-6">
         <div>
           <label className="block text-sm font-semibold text-slate-700 mb-1.5">Announcement Title</label>
           <input
