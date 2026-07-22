@@ -5,6 +5,7 @@ import AdminSidebar from './layout/AdminSidebar';
 import HospitalOwnerSidebar from './layout/HospitalOwnerSidebar';
 import RegionAdminSidebar from './layout/RegionAdminSidebar';
 import GroupAdminSidebar from './layout/GroupAdminSidebar';
+import ReceptionistSidebar from './layout/ReceptionistSidebar';
 import Header from './layout/Header';
 
 
@@ -14,11 +15,12 @@ const MainLayout = ({ role = 'superadmin' }) => {
   const [isMobileOpen, setIsMobileOpen] = useState(false);
 
   const renderSidebar = () => {
-    switch(role) {
+    switch (role) {
       case 'admin': return <AdminSidebar isCollapsed={isSidebarCollapsed} isMobileOpen={isMobileOpen} setIsMobileOpen={setIsMobileOpen} />;
       case 'hospitalOwner': return <HospitalOwnerSidebar isCollapsed={isSidebarCollapsed} isMobileOpen={isMobileOpen} setIsMobileOpen={setIsMobileOpen} />;
       case 'regionAdmin': return <RegionAdminSidebar isCollapsed={isSidebarCollapsed} isMobileOpen={isMobileOpen} setIsMobileOpen={setIsMobileOpen} />;
       case 'groupAdmin': return <GroupAdminSidebar isCollapsed={isSidebarCollapsed} isMobileOpen={isMobileOpen} setIsMobileOpen={setIsMobileOpen} />;
+      case 'receptionist': return <ReceptionistSidebar isCollapsed={isSidebarCollapsed} isMobileOpen={isMobileOpen} setIsMobileOpen={setIsMobileOpen} />;
       default: return <SuperadminSidebar isCollapsed={isSidebarCollapsed} isMobileOpen={isMobileOpen} setIsMobileOpen={setIsMobileOpen} />;
     }
   };
