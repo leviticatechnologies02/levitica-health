@@ -122,6 +122,13 @@ const Login = () => {
                 >
                   Sign In as Branch Admin
                 </button>
+                <button
+  type="button"
+  onClick={() => navigate('/receptionist')}
+  className="w-full bg-white border border-primary-500 text-primary-600 font-bold text-xs py-2.5 rounded-lg hover:bg-primary-50 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300"
+>
+  Sign In as Receptionist
+</button> 
               </div>
             </form>
           </div>

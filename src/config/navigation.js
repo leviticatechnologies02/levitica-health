@@ -338,3 +338,55 @@ export const GROUP_ADMIN_NAV = [
     icon: User,
   }
 ];
+export const RECEPTIONIST_NAV = [
+  {
+    name: "Dashboard",
+    path: "/receptionist",
+    icon: LayoutDashboard,
+  },
+  {
+    name: "Patient Registration",
+    path: "/receptionist/patient-registration",
+    icon: UsersRound,
+  },
+  {
+    name: "Patient Search",
+    path: "/receptionist/patient-search",
+    icon: User,
+  },
+  {
+    name: "Appointment Booking",
+    path: "/receptionist/appointment-booking",
+    icon: Calendar,
+  },
+  {
+    name: "Admission Initiation",
+    path: "/receptionist/admission-initiation",
+    icon: Bed,
+  },
+  {
+    name: "Patient Check In",
+    path: "/receptionist/patient-checkin",
+    icon: UserCheck,
+  },
+  {
+    name: "Patient Queue",
+    path: "/receptionist/patient-queue",
+    icon: ListChecks,
+  },
+  {
+    name: "Token Generation",
+    path: "/receptionist/token-generation",
+    icon: FileText,
+  },
+  {
+    name: "Reports",
+    path: "/receptionist/reports",
+    icon: BarChart2,
+  },
+  {
+    name: "Profile",
+    path: "/receptionist/profile",
+    icon: User,
+  }
+];

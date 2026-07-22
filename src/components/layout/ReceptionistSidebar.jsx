@@ -1,15 +1,9 @@
 import React, { useState } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
-import { SUPERADMIN_NAV, ADMIN_NAV, HOSPITAL_OWNER_NAV, REGION_ADMIN_NAV, GROUP_ADMIN_NAV,RECEPTIONIST_NAV } from '../../config/navigation';
+import { RECEPTIONIST_NAV } from "../../config/navigation";
 import { LogOut, ChevronDown, ChevronRight } from 'lucide-react';
 
-const Sidebar = ({ role = 'superadmin', isCollapsed, isMobileOpen, setIsMobileOpen }) => {
-  const navItems = role === 'superadmin' ? SUPERADMIN_NAV 
-    : (role === 'admin' ? ADMIN_NAV 
-    : (role === 'hospitalOwner' ? HOSPITAL_OWNER_NAV 
-    : (role === 'regionAdmin' ? REGION_ADMIN_NAV 
-    : (role === 'groupAdmin' ? GROUP_ADMIN_NAV 
-    : (role === 'receptionist' ? RECEPTIONIST_NAV : [])))));
+const ReceptionistSidebar = ({ isCollapsed, isMobileOpen, setIsMobileOpen }) => {
   const [openMenus, setOpenMenus] = useState({});
   const location = useLocation();
 
@@ -53,7 +47,7 @@ const Sidebar = ({ role = 'superadmin', isCollapsed, isMobileOpen, setIsMobileOp
         </div>
 
         <nav className={`flex-1 pb-6 space-y-1.5 overflow-y-auto px-4 ${isCollapsed ? 'md:px-3' : ''}`}>
-          {navItems.map((item) => {
+          {RECEPTIONIST_NAV.map((item) => {
             const Icon = item.icon;
 
             if (item.children) {
@@ -141,4 +135,4 @@ const Sidebar = ({ role = 'superadmin', isCollapsed, isMobileOpen, setIsMobileOp
   );
 };
 
-export default Sidebar;
+export default ReceptionistSidebar;
