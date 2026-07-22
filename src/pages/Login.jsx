@@ -111,7 +111,7 @@ const Login = () => {
                 <button
                   type="button"
                   onClick={() => navigate('/groupAdmin')}
-                  className="w-full bg-white border border-secondary-300 text-secondary-700 font-bold text-xs py-2.5 rounded-lg hover:bg-secondary-50 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300"
+                  className="w-full bg-white border border-primary-500 text-primary-600 font-bold text-xs py-2.5 rounded-lg hover:bg-primary-50 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300"
                 >
                   Sign In as Group Admin
                 </button>

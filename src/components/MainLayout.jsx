@@ -1,6 +1,10 @@
 import React, { useState } from 'react';
 import { Outlet } from 'react-router-dom';
-import Sidebar from './layout/Sidebar';
+import SuperadminSidebar from './layout/SuperadminSidebar';
+import AdminSidebar from './layout/AdminSidebar';
+import HospitalOwnerSidebar from './layout/HospitalOwnerSidebar';
+import RegionAdminSidebar from './layout/RegionAdminSidebar';
+import GroupAdminSidebar from './layout/GroupAdminSidebar';
 import Header from './layout/Header';
 
 
@@ -9,17 +13,23 @@ const MainLayout = ({ role = 'superadmin' }) => {
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
 
+  const renderSidebar = () => {
+    switch(role) {
+      case 'admin': return <AdminSidebar isCollapsed={isSidebarCollapsed} isMobileOpen={isMobileOpen} setIsMobileOpen={setIsMobileOpen} />;
+      case 'hospitalOwner': return <HospitalOwnerSidebar isCollapsed={isSidebarCollapsed} isMobileOpen={isMobileOpen} setIsMobileOpen={setIsMobileOpen} />;
+      case 'regionAdmin': return <RegionAdminSidebar isCollapsed={isSidebarCollapsed} isMobileOpen={isMobileOpen} setIsMobileOpen={setIsMobileOpen} />;
+      case 'groupAdmin': return <GroupAdminSidebar isCollapsed={isSidebarCollapsed} isMobileOpen={isMobileOpen} setIsMobileOpen={setIsMobileOpen} />;
+      default: return <SuperadminSidebar isCollapsed={isSidebarCollapsed} isMobileOpen={isMobileOpen} setIsMobileOpen={setIsMobileOpen} />;
+    }
+  };
+
   return (
     <div className="flex min-h-screen bg-secondary-50">
-      <Sidebar 
-        role={role}
-        isCollapsed={isSidebarCollapsed} 
-        isMobileOpen={isMobileOpen}
-        setIsMobileOpen={setIsMobileOpen}
-      />
+      {renderSidebar()}
 
       <div className={`flex-1 flex flex-col min-h-screen transition-all duration-300 ml-0 ${isSidebarCollapsed ? 'md:ml-20' : 'md:ml-64'}`}>
         <Header
+          role={role}
           toggleDesktop={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
           isDesktopCollapsed={isSidebarCollapsed}
           toggleMobile={() => setIsMobileOpen(!isMobileOpen)}

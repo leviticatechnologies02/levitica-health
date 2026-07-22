@@ -2,8 +2,30 @@ import React from 'react';
 import { Bell, Search, UserCircle, Menu, ChevronRight } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
-const Header = ({ toggleDesktop, isDesktopCollapsed, toggleMobile, isMobileOpen }) => {
+const Header = ({ toggleDesktop, isDesktopCollapsed, toggleMobile, isMobileOpen, role = 'superadmin' }) => {
   const navigate = useNavigate();
+
+  const getRoleDisplayName = (role) => {
+    switch(role) {
+      case 'superadmin': return 'Superadmin';
+      case 'admin': return 'Branch Admin';
+      case 'hospitalOwner': return 'Hospital Owner';
+      case 'regionAdmin': return 'Region Admin';
+      case 'groupAdmin': return 'Group Admin';
+      default: return 'User';
+    }
+  };
+
+  const getRoleTitle = (role) => {
+    switch(role) {
+      case 'superadmin': return 'System Admin';
+      case 'admin': return 'Administrator';
+      case 'hospitalOwner': return 'Owner';
+      case 'regionAdmin': return 'Regional Director';
+      case 'groupAdmin': return 'Group Manager';
+      default: return 'User';
+    }
+  };
 
   return (
     <header className="h-16 sm:h-20 bg-white border-b border-gray-100 flex items-center justify-between px-4 sticky top-0 z-30 transition-all duration-300">
@@ -45,8 +67,8 @@ const Header = ({ toggleDesktop, isDesktopCollapsed, toggleMobile, isMobileOpen 
         <div className="hidden sm:flex items-center gap-3 cursor-pointer group">
           <UserCircle size={32} className="text-gray-300 group-hover:text-slate-900 transition-colors" />
           <div className="hidden lg:block text-left">
-            <p className="text-sm font-semibold text-gray-800 leading-tight">System Admin</p>
-            <p className="text-xs text-gray-500">Superadmin</p>
+            <p className="text-sm font-semibold text-gray-800 leading-tight">{getRoleTitle(role)}</p>
+            <p className="text-xs text-gray-500">{getRoleDisplayName(role)}</p>
           </div>
         </div>
       </div>
