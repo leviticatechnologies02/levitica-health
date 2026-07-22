@@ -36,7 +36,7 @@ const InputField = ({ label, name, type = "text", icon: Icon, placeholder, class
     </div>
 );
 
-const AddHospital = () => {
+const AddHospital = ({ returnPath = '/superadmin/hospitals' }) => {
     const navigate = useNavigate();
     const [isSuccess, setIsSuccess] = useState(false);
 
@@ -61,7 +61,7 @@ const AddHospital = () => {
             setTimeout(() => {
                 setSubmitting(false);
                 setIsSuccess(true);
-                setTimeout(() => navigate('/superadmin/hospitals'), 1500);
+                setTimeout(() => navigate(returnPath), 1500);
             }, 1000);
         },
     });
@@ -72,7 +72,7 @@ const AddHospital = () => {
                 <div className="flex items-center gap-4">
                     <button
                         type="button"
-                        onClick={() => navigate('/superadmin/hospitals')}
+                        onClick={() => navigate(returnPath)}
                         className="p-2.5 text-slate-500 hover:text-slate-900 bg-white border border-slate-200 rounded-xl hover:bg-slate-50 transition-all shadow-sm group"
                     >
                         <ArrowLeft size={20} className="group-hover:-translate-x-0.5 transition-transform" />
@@ -191,7 +191,7 @@ const AddHospital = () => {
                         <div className="flex flex-col sm:flex-row w-full sm:w-auto gap-3">
                             <button
                                 type="button"
-                                onClick={() => navigate('/superadmin/hospitals')}
+                                onClick={() => navigate(returnPath)}
                                 className="px-6 py-2.5 rounded-xl border border-slate-200 text-slate-700 font-bold hover:bg-slate-50 hover:text-slate-900 transition-colors text-sm w-full sm:w-auto text-center"
                             >
                                 Cancel

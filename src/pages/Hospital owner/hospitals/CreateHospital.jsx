@@ -1,15 +1,11 @@
 import React from 'react';
-import ModulePlaceholder from '../../../components/common/ModulePlaceholder';
-import { PlusSquare } from 'lucide-react';
+import AddHospital from '../../superadmin/AddHospital';
 
 const CreateHospital = () => {
   return (
-    <ModulePlaceholder
-      title="Create Hospital"
-      icon={PlusSquare}
-      description="Manage create hospital settings and configurations."
-      usefulness="Add new hospitals to the organization."
-    />
+    <div className="p-6">
+      <AddHospital returnPath="/hospital-owner/hospitals/list" />
+    </div>
   );
 };
 
