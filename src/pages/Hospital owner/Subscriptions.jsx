@@ -1,8 +1,8 @@
 import React from 'react';
-import ModulePlaceholder from '../../../components/common/ModulePlaceholder';
+import ModulePlaceholder from '../../components/common/ModulePlaceholder';
 import { ClipboardList } from 'lucide-react';
 
-const SubPlans = () => {
+const Subscriptions = () => {
   return (
     <ModulePlaceholder
       title="Plans"
@@ -13,4 +13,4 @@ const SubPlans = () => {
   );
 };
 
-export default SubPlans;
+export default Subscriptions;

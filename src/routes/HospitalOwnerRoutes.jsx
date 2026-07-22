@@ -3,73 +3,51 @@ import { Routes, Route } from "react-router-dom";
 import MainLayout from "../components/MainLayout";
 
 import Dashboard from "../pages/Hospital owner/Dashboard";
-import OrgProfile from "../pages/Hospital owner/organization/Profile";
-import OrgSettings from "../pages/Hospital owner/organization/Settings";
-import OrgBranding from "../pages/Hospital owner/organization/Branding";
 
-import RegionsList from "../pages/Hospital owner/regions/List";
-import RegionsAdmins from "../pages/Hospital owner/regions/Admins";
+import Regions from "../pages/Hospital owner/regions/Regions";
+import RegionsAdmins from "../pages/Hospital owner/regions/RegionsAdmins";
 
-import GroupsList from "../pages/Hospital owner/groups/List";
-import GroupsAdmins from "../pages/Hospital owner/groups/Admins";
+import Groups from "../pages/Hospital owner/groups/Groups";
+import GroupAdmins from "../pages/Hospital owner/groups/GroupAdmins";
 
-import HospitalList from "../pages/Hospital owner/hospitals/List";
-import HospitalCreate from "../pages/Hospital owner/hospitals/Create";
+import HospitalList from "../pages/Hospital owner/hospitals/HospitalList";
+import CreateHospital from "../pages/Hospital owner/hospitals/CreateHospital";
 import HospitalBranchHeads from "../pages/Hospital owner/hospitals/BranchHeads";
 
-import OrgUsers from "../pages/Hospital owner/users/OrganizationUsers";
-import RoleManagement from "../pages/Hospital owner/users/RoleManagement";
-import PermissionManagement from "../pages/Hospital owner/users/PermissionManagement";
+import Patients from "../pages/Hospital owner/Patients";
 
-import SubPlans from "../pages/Hospital owner/subscription/Plans";
-import SubBilling from "../pages/Hospital owner/subscription/Billing";
-import SubLicenses from "../pages/Hospital owner/subscription/Licenses";
+import Subscriptions from "../pages/Hospital owner/Subscriptions";
 
-import RepOrganization from "../pages/Hospital owner/reports/Organization";
-import RepHospital from "../pages/Hospital owner/reports/Hospital";
-import RepRevenue from "../pages/Hospital owner/reports/Revenue";
-
-import CompLicenses from "../pages/Hospital owner/compliance/Licenses";
-import CompAuditLogs from "../pages/Hospital owner/compliance/AuditLogs";
+import RepOrganization from "../pages/Hospital owner/Reports";
 
 import Notifications from "../pages/Hospital owner/Notifications";
-import Integrations from "../pages/Hospital owner/Integrations";
 import Settings from "../pages/Hospital owner/Settings";
 import Profile from "../pages/Hospital owner/Profile";
+import Reports from "../pages/Hospital owner/Reports";
 
 const HospitalOwnerRoutes = () => {
     return (
         <Routes>
             <Route element={<MainLayout role="hospitalOwner" />}>
                 <Route index element={<Dashboard />} />
-                
-                <Route path="organization/profile" element={<OrgProfile />} />
-                <Route path="organization/settings" element={<OrgSettings />} />
-                <Route path="organization/branding" element={<OrgBranding />} />
 
-                <Route path="regions/list" element={<RegionsList />} />
+                <Route path="regions/list" element={<Regions />} />
                 <Route path="regions/admins" element={<RegionsAdmins />} />
 
-                <Route path="groups/list" element={<GroupsList />} />
-                <Route path="groups/admins" element={<GroupsAdmins />} />
+                <Route path="groups/list" element={<Groups />} />
+                <Route path="groups/admins" element={<GroupAdmins />} />
 
                 <Route path="hospitals/list" element={<HospitalList />} />
-                <Route path="hospitals/create" element={<HospitalCreate />} />
+                <Route path="hospitals/create" element={<CreateHospital />} />
                 <Route path="hospitals/branch-heads" element={<HospitalBranchHeads />} />
 
-                <Route path="users" element={<OrgUsers />} />
+                <Route path="users" element={<Patients />} />
 
-                <Route path="subscription" element={<SubPlans />} />
+                <Route path="subscription" element={<Subscriptions />} />
 
-                <Route path="reports/organization" element={<RepOrganization />} />
-                <Route path="reports/hospital" element={<RepHospital />} />
-                <Route path="reports/revenue" element={<RepRevenue />} />
-
-                <Route path="compliance/licenses" element={<CompLicenses />} />
-                <Route path="compliance/audit-logs" element={<CompAuditLogs />} />
+                <Route path="reports" element={<Reports />} />
 
                 <Route path="notifications" element={<Notifications />} />
-                <Route path="integrations" element={<Integrations />} />
                 <Route path="settings" element={<Settings />} />
                 <Route path="profile" element={<Profile />} />
             </Route>

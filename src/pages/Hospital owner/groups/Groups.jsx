@@ -2,7 +2,7 @@ import React from 'react';
 import ModulePlaceholder from '../../../components/common/ModulePlaceholder';
 import { Users } from 'lucide-react';
 
-const GroupsList = () => {
+const Groups = () => {
   return (
     <ModulePlaceholder
       title="Groups"
@@ -13,4 +13,4 @@ const GroupsList = () => {
   );
 };
 
-export default GroupsList;
+export default Groups;

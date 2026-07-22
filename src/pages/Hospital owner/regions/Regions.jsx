@@ -2,7 +2,7 @@ import React from 'react';
 import ModulePlaceholder from '../../../components/common/ModulePlaceholder';
 import { MapPin } from 'lucide-react';
 
-const RegionsList = () => {
+const Regions = () => {
   return (
     <ModulePlaceholder
       title="Regions"
@@ -13,4 +13,4 @@ const RegionsList = () => {
   );
 };
 
-export default RegionsList;
+export default Regions;

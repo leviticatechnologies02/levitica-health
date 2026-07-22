@@ -214,7 +214,7 @@ export const HOSPITAL_OWNER_NAV = [
     ]
   },
   {
-    name: 'Users',
+    name: 'Patients',
     path: '/hospital-owner/users',
     icon: UsersRound
   },
@@ -225,12 +225,8 @@ export const HOSPITAL_OWNER_NAV = [
   },
   {
     name: 'Reports',
-    icon: BarChart2,
-    children: [
-      { name: 'Organization Reports', path: '/hospital-owner/reports/organization', icon: BarChart2 },
-      { name: 'Hospital Reports', path: '/hospital-owner/reports/hospital', icon: BarChart2 },
-      { name: 'Revenue Reports', path: '/hospital-owner/reports/revenue', icon: DollarSign },
-    ]
+    path: '/hospital-owner/reports',
+    icon: BarChart2
   },
   {
     name: 'Notifications',

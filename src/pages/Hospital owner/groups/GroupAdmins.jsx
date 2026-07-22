@@ -2,7 +2,7 @@ import React from 'react';
 import ModulePlaceholder from '../../../components/common/ModulePlaceholder';
 import { UserCheck } from 'lucide-react';
 
-const GroupsAdmins = () => {
+const GroupAdmins = () => {
   return (
     <ModulePlaceholder
       title="Group Admins"
@@ -13,4 +13,4 @@ const GroupsAdmins = () => {
   );
 };
 
-export default GroupsAdmins;
+export default GroupAdmins;

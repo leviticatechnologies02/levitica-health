@@ -2,7 +2,7 @@ import React from 'react';
 import ModulePlaceholder from '../../../components/common/ModulePlaceholder';
 import { PlusSquare } from 'lucide-react';
 
-const HospitalCreate = () => {
+const CreateHospital = () => {
   return (
     <ModulePlaceholder
       title="Create Hospital"
@@ -13,4 +13,4 @@ const HospitalCreate = () => {
   );
 };
 
-export default HospitalCreate;
+export default CreateHospital;

@@ -1,8 +1,8 @@
 import React from 'react';
-import ModulePlaceholder from '../../../components/common/ModulePlaceholder';
+import ModulePlaceholder from '../../components/common/ModulePlaceholder';
 import { BarChart2 } from 'lucide-react';
 
-const RepOrganization = () => {
+const Reports = () => {
   return (
     <ModulePlaceholder
       title="Organization Reports"
@@ -13,4 +13,4 @@ const RepOrganization = () => {
   );
 };
 
-export default RepOrganization;
+export default Reports;
