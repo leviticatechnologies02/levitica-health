@@ -2,11 +2,11 @@ import React from 'react';
 import Table from '../../../components/common/Table';
 import { UserCheck, Plus, Search, Filter } from 'lucide-react';
 
-const HospitalBranchHeads = () => {
-  const branchHeadsColumns = [
-    { header: 'Branch Head Name', accessor: 'name' },
+const GroupAdmins = () => {
+  const adminsColumns = [
+    { header: 'Admin Name', accessor: 'name' },
     { header: 'Email', accessor: 'email' },
-    { header: 'Assigned Hospital', accessor: 'hospital' },
+    { header: 'Assigned Group', accessor: 'group' },
     { header: 'Status', render: (row) => (
       <span className={`px-2 py-1 rounded-full text-xs font-semibold ${row.status === 'Active' ? 'bg-emerald-100 text-emerald-700' : 'bg-slate-100 text-slate-700'}`}>
         {row.status}
@@ -17,9 +17,9 @@ const HospitalBranchHeads = () => {
     ) }
   ];
 
-  const branchHeadsData = [
-    { name: 'Dr. Emily Chen', email: 'emily.c@hospital.com', hospital: 'City General Hospital', status: 'Active' },
-    { name: 'Dr. Michael Scott', email: 'michael.s@hospital.com', hospital: 'Valley Medical Center', status: 'Active' },
+  const adminsData = [
+    { name: 'John Doe', email: 'john.d@example.com', group: 'City Health Group', status: 'Active' },
+    { name: 'Sarah Connor', email: 'sarah.c@example.com', group: 'Valley Care Group', status: 'Active' },
   ];
 
   return (
@@ -27,9 +27,9 @@ const HospitalBranchHeads = () => {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
         <div>
           <h1 className="text-2xl font-bold text-slate-900 tracking-tight flex items-center gap-2">
-            Branch Heads
+            Group Admins
           </h1>
-          <p className="text-slate-500 mt-1">Manage heads and administrators of different hospital branches.</p>
+          <p className="text-slate-500 mt-1">Manage administrators for your organizational groups.</p>
         </div>
         <div className="flex items-center gap-3">
           <button className="flex items-center justify-center gap-2 px-4 py-2 bg-white border border-slate-200 text-slate-700 rounded-lg hover:bg-slate-50 transition-colors shadow-sm font-medium text-sm">
@@ -38,7 +38,7 @@ const HospitalBranchHeads = () => {
           </button>
           <button className="flex items-center justify-center gap-2 px-4 py-2 bg-primary-500 text-white rounded-lg hover:bg-primary-600 transition-all shadow-md font-medium text-sm">
             <Plus size={16} />
-            Add Branch Head
+            Add Admin
           </button>
         </div>
       </div>
@@ -48,17 +48,17 @@ const HospitalBranchHeads = () => {
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
           <input 
             type="text" 
-            placeholder="Search branch heads..." 
+            placeholder="Search admins..." 
             className="w-full pl-10 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500 transition-all"
           />
         </div>
       </div>
 
       <div className="flex-1">
-        <Table columns={branchHeadsColumns} data={branchHeadsData} className="rounded-t-none border-t-0" />
+        <Table columns={adminsColumns} data={adminsData} className="rounded-t-none border-t-0" />
       </div>
     </div>
   );
 };
 
-export default HospitalBranchHeads;
+export default GroupAdmins;

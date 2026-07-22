@@ -150,7 +150,7 @@ const PlanFormModal = ({ initialData, onSubmit, onCancel }) => {
       onClose={onCancel}
       title={isEditing ? 'Edit Subscription Plan' : 'Create New Plan'}
     >
-      <form onSubmit={formik.handleSubmit} className="p-6 space-y-5">
+      <form onSubmit={formik.handleSubmit} className="space-y-5">
         <div>
           <label className="block text-sm font-semibold text-slate-700 mb-1.5">Plan Name</label>
           <input
