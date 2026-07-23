@@ -38,8 +38,8 @@ const PatientCheckIn = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 p-6">
-      <div className="mx-auto max-w-5xl space-y-8">
+    // <div className="min-h-screen bg-gray-50 p-6">
+      <div className="mx-auto space-y-8">
         {/* Heading */}
         <div>
           <h1 className="text-3xl font-bold text-gray-800">
@@ -134,7 +134,7 @@ const PatientCheckIn = () => {
           </div>
         )}
       </div>
-    </div>
+    // </div>
   );
 };
 

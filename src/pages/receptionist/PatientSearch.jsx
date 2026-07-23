@@ -36,8 +36,8 @@ const PatientSearch = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 p-6">
-      <div className="mx-auto max-w-5xl">
+    <div className="min-h-screen">
+      <div className="mx-auto ">
         {/* Heading */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-800">
