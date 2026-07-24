@@ -6,7 +6,6 @@ import HospitalOwnerSidebar from './layout/HospitalOwnerSidebar';
 import RegionAdminSidebar from './layout/RegionAdminSidebar';
 import GroupAdminSidebar from './layout/GroupAdminSidebar';
 import ReceptionistSidebar from './layout/ReceptionistSidebar';
-import DoctorSidebar from './layout/DoctorSidebar';
 import Header from './layout/Header';
 
 
@@ -22,7 +21,6 @@ const MainLayout = ({ role = 'superadmin' }) => {
       case 'regionAdmin': return <RegionAdminSidebar isCollapsed={isSidebarCollapsed} isMobileOpen={isMobileOpen} setIsMobileOpen={setIsMobileOpen} />;
       case 'groupAdmin': return <GroupAdminSidebar isCollapsed={isSidebarCollapsed} isMobileOpen={isMobileOpen} setIsMobileOpen={setIsMobileOpen} />;
       case 'receptionist': return <ReceptionistSidebar isCollapsed={isSidebarCollapsed} isMobileOpen={isMobileOpen} setIsMobileOpen={setIsMobileOpen} />;
-      case 'doctor': return <DoctorSidebar isCollapsed={isSidebarCollapsed} isMobileOpen={isMobileOpen} setIsMobileOpen={setIsMobileOpen} />;
       default: return <SuperadminSidebar isCollapsed={isSidebarCollapsed} isMobileOpen={isMobileOpen} setIsMobileOpen={setIsMobileOpen} />;
     }
   };

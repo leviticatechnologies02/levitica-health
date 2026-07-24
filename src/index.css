@@ -36,3 +36,25 @@
   scrollbar-width: thin;
   scrollbar-color: #cbd5e1 #f8fafc;
 }
+
+/* Global Cursor Fixes for Interactive Elements */
+@layer base {
+  button, 
+  a, 
+  [role="button"],
+  select,
+  input[type="submit"], 
+  input[type="button"], 
+  input[type="reset"],
+  input[type="checkbox"],
+  input[type="radio"] {
+    cursor: pointer;
+  }
+
+  button:disabled,
+  input:disabled,
+  [role="button"]:disabled,
+  [aria-disabled="true"] {
+    cursor: not-allowed;
+  }
+}

@@ -6,23 +6,27 @@ const Header = ({ toggleDesktop, isDesktopCollapsed, toggleMobile, isMobileOpen,
   const navigate = useNavigate();
 
   const getRoleDisplayName = (role) => {
-    switch(role) {
+    switch (role) {
       case 'superadmin': return 'Superadmin';
       case 'admin': return 'Branch Admin';
       case 'hospitalOwner': return 'Hospital Owner';
       case 'regionAdmin': return 'Region Admin';
       case 'groupAdmin': return 'Group Admin';
+      case 'receptionist': return 'Receptionist';
+      case 'nurse': return 'Nurse';
       default: return 'User';
     }
   };
 
   const getRoleTitle = (role) => {
-    switch(role) {
+    switch (role) {
       case 'superadmin': return 'System Admin';
       case 'admin': return 'Administrator';
       case 'hospitalOwner': return 'Owner';
       case 'regionAdmin': return 'Regional Director';
       case 'groupAdmin': return 'Group Manager';
+      case 'receptionist': return 'Receptionist';
+      case 'nurse': return 'Nurse';
       default: return 'User';
     }
   };

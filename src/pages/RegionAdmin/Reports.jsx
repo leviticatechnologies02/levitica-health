@@ -13,6 +13,11 @@ const REGION_REVENUE_DATA = [
   { month: 'May', Apollo: 1890, Fortis: 4800, Max: 2181 },
   { month: 'Jun', Apollo: 2390, Fortis: 3800, Max: 2500 },
   { month: 'Jul', Apollo: 3490, Fortis: 4300, Max: 2100 },
+  { month: 'Aug', Apollo: 2000, Fortis: 9800, Max: 2290 },
+  { month: 'Sep', Apollo: 2780, Fortis: 3908, Max: 2000 },
+  { month: 'Oct', Apollo: 1890, Fortis: 4800, Max: 2181 },
+  { month: 'Nov', Apollo: 2390, Fortis: 3800, Max: 2500 },
+  { month: 'Dec', Apollo: 3490, Fortis: 4300, Max: 2100 },
 ];
 
 const Reports = () => {

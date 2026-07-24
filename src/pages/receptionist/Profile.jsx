@@ -1,143 +1,203 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
+import { User, Save, Mail, Phone, CheckCircle2, Camera, LogOut } from 'lucide-react';
+
 const Profile = () => {
+  const [isSaving, setIsSaving] = useState(false);
+  const [showSuccess, setShowSuccess] = useState(false);
+
   const [profile, setProfile] = useState({
-    name: "Leela",
-    employeeId: "REC001",
-    role: "Receptionist",
-    email: "leela@hospital.com",
-    mobile: "9876543210",
-    department: "Reception",
+    firstName: 'System',
+    lastName: '',
+    email: 'System@hospital.com',
+    phone: '9876543210',
   });
 
-  const [edit, setEdit] = useState(false);
-
-  const handleChange = (e) => {
-    setProfile({
-      ...profile,
-      [e.target.name]: e.target.value,
-    });
+  const handleSave = (e) => {
+    e.preventDefault();
+    setIsSaving(true);
+    setTimeout(() => {
+      setIsSaving(false);
+      setShowSuccess(true);
+      setTimeout(() => setShowSuccess(false), 3000);
+    }, 1000);
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 p-6">
-      <div className="mx-auto max-w-5xl rounded-xl bg-white p-8 shadow-md">
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-800">
-            Receptionist Profile
-          </h1>
-          <p className="mt-2 text-gray-500">
-            View and update your profile information.
+    <div className="animate-in fade-in zoom-in-95 duration-500 mx-auto pb-16 space-y-8">
+
+      {/* Top Banner Area */}
+      <div>
+        <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight">My Profile</h1>
+        <p className="text-slate-500 text-sm mt-1 font-medium">Manage your personal information and account details.</p>
+      </div>
+
+      {/* 1. Profile Overview Card */}
+      <div className="bg-white rounded-3xl shadow-sm border border-slate-100 p-8 flex flex-col md:flex-row items-center md:items-start gap-8 relative overflow-hidden">
+
+        <div className="absolute top-0 right-0 w-64 h-64 bg-primary-50 rounded-full blur-3xl -mr-20 -mt-20 pointer-events-none"></div>
+
+        <div className="relative group cursor-pointer shrink-0">
+          <div className="w-28 h-28 rounded-full bg-gradient-to-br from-primary-500 to-primary-600 text-white flex items-center justify-center text-4xl font-bold uppercase shadow-xl border-4 border-white">
+            {profile.firstName.charAt(0)}{profile.lastName.charAt(0)}
+          </div>
+
+          <div className="absolute inset-0 bg-black/40 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity backdrop-blur-sm">
+            <Camera className="text-white" size={24} />
+          </div>
+        </div>
+
+        <div className="flex-1 text-center md:text-left z-10">
+          <h2 className="text-2xl font-bold text-slate-900">
+            {profile.firstName} {profile.lastName}
+          </h2>
+
+          <p className="text-primary-600 font-bold text-sm mt-1 tracking-wide uppercase">
+            Receptionist
+          </p>
+
+          <div className="flex flex-wrap items-center justify-center md:justify-start gap-4 mt-5 text-sm text-slate-600 font-medium">
+
+            <span className="flex items-center gap-1.5 bg-slate-50 px-3 py-1.5 rounded-lg border border-slate-100">
+              <Mail size={16} className="text-slate-400" />
+              {profile.email}
+            </span>
+
+            <span className="flex items-center gap-1.5 bg-slate-50 px-3 py-1.5 rounded-lg border border-slate-100">
+              <Phone size={16} className="text-slate-400" />
+              {profile.phone}
+            </span>
+
+          </div>
+        </div>
+
+        <div className="z-10 w-full md:w-auto">
+          <button className="w-full md:w-auto flex items-center justify-center gap-2 px-5 py-2.5 bg-red-50 text-red-600 font-bold rounded-xl hover:bg-red-100 transition-colors text-sm border border-red-100">
+            <LogOut size={16} />
+            Sign Out
+          </button>
+        </div>
+      </div>
+            {/* 2. Personal Information Form */}
+      <div className="bg-white rounded-3xl shadow-sm border border-slate-100 overflow-hidden">
+        <div className="px-8 py-6 border-b border-slate-100">
+          <h3 className="text-lg font-bold text-slate-900 flex items-center gap-2">
+            <User className="text-primary-500" size={20} />
+            Personal Information
+          </h3>
+          <p className="text-slate-500 text-sm mt-1">
+            Update your personal details and contact information.
           </p>
         </div>
 
-        <div className="grid gap-6 md:grid-cols-2">
-          {/* Name */}
-          <div>
-            <label className="mb-2 block text-sm font-semibold text-gray-700">
-              Name
-            </label>
-            <input
-              type="text"
-              name="name"
-              value={profile.name}
-              disabled={!edit}
-              onChange={handleChange}
-              className={`w-full rounded-lg border px-4 py-2 outline-none transition ${
-                edit
-                  ? "border-blue-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
-                  : "cursor-not-allowed border-gray-300 bg-gray-100"
-              }`}
-            />
-          </div>
+        <form onSubmit={handleSave}>
+          <div className="p-8 space-y-6">
 
-          {/* Employee ID */}
-          <div>
-            <label className="mb-2 block text-sm font-semibold text-gray-700">
-              Employee ID
-            </label>
-            <input
-              type="text"
-              value={profile.employeeId}
-              disabled
-              className="w-full cursor-not-allowed rounded-lg border border-gray-300 bg-gray-100 px-4 py-2"
-            />
-          </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
 
-          {/* Role */}
-          <div>
-            <label className="mb-2 block text-sm font-semibold text-gray-700">
-              Role
-            </label>
-            <input
-              type="text"
-              value={profile.role}
-              disabled
-              className="w-full cursor-not-allowed rounded-lg border border-gray-300 bg-gray-100 px-4 py-2"
-            />
-          </div>
+              <div>
+                <label className="block text-sm font-semibold text-slate-700 mb-2">
+                  First Name
+                </label>
+                <input
+                  type="text"
+                  value={profile.firstName}
+                  onChange={(e) =>
+                    setProfile({ ...profile, firstName: e.target.value })
+                  }
+                  className="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-4 focus:ring-primary-500/10 focus:border-primary-500 transition-all bg-slate-50/50 hover:bg-white"
+                />
+              </div>
 
-          {/* Department */}
-          <div>
-            <label className="mb-2 block text-sm font-semibold text-gray-700">
-              Department
-            </label>
-            <input
-              type="text"
-              value={profile.department}
-              disabled
-              className="w-full cursor-not-allowed rounded-lg border border-gray-300 bg-gray-100 px-4 py-2"
-            />
-          </div>
+              <div>
+                <label className="block text-sm font-semibold text-slate-700 mb-2">
+                  Last Name
+                </label>
+                <input
+                  type="text"
+                  value={profile.lastName}
+                  onChange={(e) =>
+                    setProfile({ ...profile, lastName: e.target.value })
+                  }
+                  className="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-4 focus:ring-primary-500/10 focus:border-primary-500 transition-all bg-slate-50/50 hover:bg-white"
+                />
+              </div>
 
-          {/* Email */}
-          <div>
-            <label className="mb-2 block text-sm font-semibold text-gray-700">
-              Email
-            </label>
-            <input
-              type="email"
-              name="email"
-              value={profile.email}
-              disabled={!edit}
-              onChange={handleChange}
-              className={`w-full rounded-lg border px-4 py-2 outline-none transition ${
-                edit
-                  ? "border-blue-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
-                  : "cursor-not-allowed border-gray-300 bg-gray-100"
-              }`}
-            />
-          </div>
+            </div>
 
-          {/* Mobile */}
-          <div>
-            <label className="mb-2 block text-sm font-semibold text-gray-700">
-              Mobile
-            </label>
-            <input
-              type="text"
-              name="mobile"
-              value={profile.mobile}
-              disabled={!edit}
-              onChange={handleChange}
-              className={`w-full rounded-lg border px-4 py-2 outline-none transition ${
-                edit
-                  ? "border-blue-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
-                  : "cursor-not-allowed border-gray-300 bg-gray-100"
-              }`}
-            />
-          </div>
-        </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
 
-        <button
-          onClick={() => setEdit(!edit)}
-          className={`mt-8 rounded-lg px-6 py-3 font-semibold text-white transition ${
-            edit
-              ? "bg-green-600 hover:bg-green-700"
-              : "bg-[#f95e09] hover:bg-[#f95e09]/90"
-          }`}
-        >
-          {edit ? "Save Profile" : "Edit Profile"}
-        </button>
+              <div>
+                <label className="block text-sm font-semibold text-slate-700 mb-2">
+                  Email Address
+                </label>
+
+                <div className="relative">
+                  <Mail
+                    className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400"
+                    size={18}
+                  />
+
+                  <input
+                    type="email"
+                    value={profile.email}
+                    onChange={(e) =>
+                      setProfile({ ...profile, email: e.target.value })
+                    }
+                    className="w-full pl-10 pr-4 py-3 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-4 focus:ring-primary-500/10 focus:border-primary-500 transition-all bg-slate-50/50 hover:bg-white"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-sm font-semibold text-slate-700 mb-2">
+                  Phone Number
+                </label>
+
+                <div className="relative">
+                  <Phone
+                    className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400"
+                    size={18}
+                  />
+
+                  <input
+                    type="text"
+                    value={profile.phone}
+                    onChange={(e) =>
+                      setProfile({ ...profile, phone: e.target.value })
+                    }
+                    className="w-full pl-10 pr-4 py-3 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-4 focus:ring-primary-500/10 focus:border-primary-500 transition-all bg-slate-50/50 hover:bg-white"
+                  />
+                </div>
+              </div>
+
+            </div>
+                      </div>
+
+          <div className="px-8 py-5 bg-slate-50 border-t border-slate-100 flex items-center justify-end gap-4">
+
+            {showSuccess && (
+              <span className="text-success-600 text-sm font-bold flex items-center gap-1.5 animate-in fade-in slide-in-from-right-4">
+                <CheckCircle2 size={16} />
+                Saved Successfully
+              </span>
+            )}
+
+            <button
+              type="submit"
+              disabled={isSaving}
+              className="flex items-center gap-2 px-6 py-2.5 bg-slate-900 text-white font-bold rounded-xl hover:bg-slate-800 transition-colors disabled:opacity-70 text-sm shadow-md"
+            >
+              {isSaving ? (
+                <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+              ) : (
+                <Save size={16} />
+              )}
+
+              Save Profile
+            </button>
+
+          </div>
+        </form>
       </div>
     </div>
   );
