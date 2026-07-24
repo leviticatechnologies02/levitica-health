@@ -44,7 +44,12 @@ import {
   ListChecks,
   Bell,
   Link,
-  Palette
+  Palette,
+  CalendarCheck,
+  CalendarDays,
+  MessageSquare,
+  PieChart,
+  Ticket
 } from 'lucide-react';
 
 export const SUPERADMIN_NAV = [
@@ -384,5 +389,68 @@ export const RECEPTIONIST_NAV = [
     name: "Profile",
     path: "/receptionist/profile",
     icon: User,
+  }
+];
+
+export const DOCTOR_NAV = [
+  {
+    name: "Dashboard Overview",
+    path: "/doctor",
+    icon: LayoutDashboard,
+  },
+  {
+    name: "Appointment Tracking",
+    path: "/doctor/appointment-tracking",
+    icon: CalendarCheck,
+  },
+  {
+    name: "Schedule Management",
+    path: "/doctor/schedule",
+    icon: CalendarDays,
+  },
+  {
+    name: "Patient Records",
+    path: "/doctor/patients",
+    icon: UsersRound,
+  },
+  {
+    name: "Treatment Plans",
+    path: "/doctor/treatment-plans",
+    icon: ClipboardList,
+  },
+  {
+    name: "Prescriptions",
+    path: "/doctor/prescriptions",
+    icon: Pill,
+  },
+  {
+    name: "Lab Results",
+    path: "/doctor/labs",
+    icon: Microscope,
+  },
+  {
+    name: "Inpatient Visits",
+    path: "/doctor/inpatient",
+    icon: BedDouble,
+  },
+  {
+    name: "Messaging",
+    path: "/doctor/messages",
+    icon: MessageSquare,
+  },
+  {
+    name: "Reports & Analytics",
+    path: "/doctor/reports",
+    icon: PieChart,
+  },
+  {
+    name: "My Profile",
+    path: "/doctor/profile",
+    icon: User,
+  },
+  {
+    name: "Raise Ticket",
+    path: "/doctor/tickets",
+    icon: Ticket,
   }
 ];
