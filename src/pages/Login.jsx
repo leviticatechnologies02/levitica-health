@@ -136,6 +136,7 @@ const Login = () => {
                 >
                   Sign In as Doctor
                 </button>
+                <button
                   type="button"
                   onClick={() => navigate('/receptionist')}
                   className="w-full bg-white border border-secondary-500 text-secondary-600 font-bold text-xs py-2.5 rounded-lg hover:bg-secondary-50 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300"
